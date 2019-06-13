@@ -1,0 +1,281 @@
+﻿* {
+    margin: 0px;
+    padding: 0px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+}
+
+.app-not-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+button, a, input, textarea:focus {
+    outline: 0 none !important; /*去掉点击是周围出现的虚线框*/
+    blr: expression(this.onFocus=this.blur());
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+    a:hover {
+        text-decoration: none;
+    }
+
+#app-left {
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background-color: #333;
+    z-index: 1;
+    overflow: hidden
+}
+
+#app-right {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #f3f3f3;
+    z-index: 0;
+}
+
+#app-menu-logo {
+    margin-top: 0px;
+    height: 58px;
+    text-align: center;
+    overflow: hidden;
+    margin-bottom: 0;
+    background-color: #222;
+}
+
+    #app-menu-logo span {
+        font-size: 24px;
+        line-height: 58px;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    #app-menu-logo a:hover span {
+        color: white;
+        text-decoration: none;
+    }
+
+#app-menu-scroll {
+    margin-right: -20px;
+    overflow: auto;
+    z-index: 1;
+}
+
+#app-menu-accordion {
+    width: 300px;
+}
+
+    #app-menu-accordion .glyphicon {
+        width: 20px !important;
+    }
+
+
+
+.app-panel {
+    border: none;
+    background-color: #333;
+    border-radius: 0px;
+    margin-bottom: 0px !important;
+}
+
+    .app-panel panel {
+        background-color: #333;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .app-panel > div a {
+        height: 32px;
+    }
+
+.app-muen-icon {
+    position: absolute;
+    right: 5px;
+    height: 100%;
+    display: -webkit-flex; /*在webkit内核的浏览器上使用要加前缀*/
+    display: flex; /*将其定义为弹性容器*/
+    align-items: center; /*垂直居中*/
+    font-size: 12px;
+}
+
+.app-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    width: 100%;
+    text-align: left;
+    background-color: #333;
+    border-color: #333;
+    border-radius: 0px;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
+}
+
+.btn.focus, .btn:focus, .btn:hover {
+    color: #fff !important;
+    background-color: #5c5c5c;
+    border-color: #5c5c5c;
+}
+
+#app-header {
+    position: relative;
+    box-sizing: border-box;
+    background-color: white;
+    padding-bottom: 2px;
+}
+
+.app-body {
+    min-height: 30px;
+}
+
+.app-body, #app-header {
+    margin-left: 300px;
+}
+
+.app-header-info {
+    min-height: 58px;
+}
+
+#app-menu-status {
+    width: 28px;
+    height: 28px;
+    margin-top: 15px;
+    margin-left: 5px;
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+}
+
+    #app-menu-status span {
+        font-size: 20px;
+        color: #4d4d4d;
+    }
+
+.app-header-clip {
+    min-height: 42px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-left: none;
+    border-right: none;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,.1);
+}
+
+#app-body {
+    min-height: 30px;
+}
+
+#app-body, .app-header {
+    margin-left: 300px;
+}
+
+    #app-body iframe {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+    }
+
+/*------user------*/
+.app-header-info-right {
+    overflow: hidden;
+    float: right;
+}
+
+    .app-header-info-right > div {
+        display: -webkit-flex;
+        display: flex;
+        align-items: center;
+        border: none;
+        background-color: white;
+        height: 58px;
+        float: left;
+        cursor: pointer;
+        transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
+    }
+
+        .app-header-info-right > div:focus,
+        .app-header-info-right > div:hover,
+        .app-user-dropdown:focus,
+        .app-user-dropdown:hover {
+            background-color: #F0F0F0;
+        }
+
+#app-full-screen {
+    padding: 0px 10px 0px 10px;
+}
+
+    #app-full-screen span {
+        font-size: 18px;
+    }
+
+.app-user-dropdown {
+    display:block;
+    background-color: transparent;
+    border: none;
+    height: 100%;
+    padding: 0px 10px 0px 7px;
+}
+
+    .app-user-dropdown strong {
+        padding: 0px 8px 0px 4px;
+    }
+
+    .app-user-dropdown img {
+        height: 42px;
+        width: 42px;
+        border-radius: 21px;
+    }
+
+    .app-user-dropdown span {
+        font-size: 12px;
+    }
+
+.app-user-menu {
+    padding: 2px 0;
+    top: 60px;
+    min-width: 185px;
+    overflow-y:auto;
+}
+
+    .app-user-menu > li > a {
+        padding: 6px 25px;
+    }
+
+    .app-user-menu .divider {
+        margin: 2px 0;
+    }
+
+.app-copyright {
+    padding: 6px 25px 3px 25px
+}
+
+    .app-copyright p {
+        padding-top: 15px;
+        overflow: hidden;
+    }
+
+    .app-copyright span {
+        padding-top: 3px;
+    }
+    .app-copyright img,
+    .app-copyright span {
+        display: inline-block;
+    }
+
+.app-copyright-more a {
+    display: initial !important;
+}
+/*----------------*/
+
+.app-dropdown-submenu {
+    display: none;
+    box-shadow: 0 3px 6px rgba(0,0,0,.175);
+}

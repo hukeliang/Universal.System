@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.9.2" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Universal.System.Common\Universal.System.Common.csproj" />
+    <ProjectReference Include="..\Universal.System.DataAccess.Interface\Universal.System.DataAccess.Interface.csproj" />
+    <ProjectReference Include="..\Universal.System.Entity\Universal.System.Entity.csproj" />
+    <ProjectReference Include="..\Universal.System.Service.Interface\Universal.System.Service.Interface.csproj" />
+    <ProjectReference Include="..\Universal.System.Service\Universal.System.Service.csproj" />
+  </ItemGroup>
+
+</Project>

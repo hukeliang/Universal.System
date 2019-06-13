@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://cdn.cameronsino.com/jquery-ui-1.12.1-erp/jquery-1.11.1.min.js"></script>
+    <script>
+        $(function () {
+
+            var postUser = {
+                UserName: "admin123",
+                PassWord: "hukeliang123456789",
+                Email:"73221@qq.com"
+            }
+
+
+            $.ajax({
+                type: 'post',
+                dataType: "json",
+                contentType: "application/json",
+                url: '/api/v1/user/login',
+                data: JSON.stringify(postUser),
+                beforeSend: function (XHR) {
+                    //发送ajax请求之前向http的head里面加入验证信息
+                    XHR.setRequestHeader('Authorization', 'Token'); //Token FGfFAS8FS2VH568HRTYI9OLS3C5GWRT62GSD54Y4OTINBJMAQFJUQERYNVNASGA
+                },
+                success: function (data) {
+
+                },
+
+
+            });
+        })
+    </script>
+</head>
+<body>
+
+</body>
+</html>

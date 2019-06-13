@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.5" />
+    <PackageReference Include="Dapper.SimpleCRUD" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Universal.System.Common\Universal.System.Common.csproj" />
+    <ProjectReference Include="..\Universal.System.DataAccess.Interface\Universal.System.DataAccess.Interface.csproj" />
+  </ItemGroup>
+
+</Project>

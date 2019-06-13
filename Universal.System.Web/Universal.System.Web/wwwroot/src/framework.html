@@ -1,0 +1,317 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Universal.System - 首页</title>
+    <meta name="keywords" content="Universal.System,通用,后台系统,ERP" />
+    <meta name="description" content="Universal.System,通用后台系统" />
+    <link href="/src/favicon.ico" rel="bookmark" type="image/x-icon" />
+    <link href="/src/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="/src/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <!--<link href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />-->
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+
+    <link href="css/framework-initialize.css" rel="stylesheet" />
+    <script src="js/framework-initialize.js"></script>
+    <script>
+        var data = [
+            { id: 1, name: "Hello World", icon: "glyphicon-send", parent_id: 0 },
+            { id: 2, name: "系统设置", icon: "glyphicon-wrench", parent_id: 0 },
+            { id: 3, name: "菜单管理", icon: "glyphicon-th-list", parent_id: 2 },
+            { id: 4, name: "图标管理", icon: "glyphicon-tag", parent_id: 2 },
+            { id: 5, name: "权限管理", icon: "glyphicon-lock", parent_id: 2 },
+            { id: 6, name: "角色管理", icon: "glyphicon-user", parent_id: 2 },
+            { id: 7, name: "用户管理", icon: "glyphicon-volume-down", parent_id: 2 },
+            { id: 8, name: "无极限菜单", icon: "glyphicon-link", parent_id: 0 },
+            { id: 9, name: "更多", icon: "glyphicon-option-horizontal", parent_id: 0 },
+            { id: 10, name: "二级菜单", icon: "glyphicon-folder-close", parent_id: 8 },
+            { id: 11, name: "三级菜单", icon: "glyphicon-eye-open", parent_id: 10 },
+            { id: 12, name: "四级菜单", icon: "glyphicon-leaf", parent_id: 11 },
+            { id: 13, name: "五级菜单", icon: "glyphicon-warning-sign", parent_id: 12 },
+            { id: 14, name: "六级菜单", icon: "glyphicon-bookmark", parent_id: 13 },
+            { id: 15, name: "七级菜单", icon: "glyphicon-tags", parent_id: 14 },
+        ];
+
+        /**
+         * 无极限菜单树
+         * @param arr 菜单数组信息
+         * @param id 菜单主键id
+         */
+        var menuTree = function (arr, id) {
+            //处理数据 给菜单等级
+            var addLevel = function (arr, id) {
+                var data = [], level = 0;
+                var addLevel = function (arr, id, level) {
+                    for (var i in arr) {
+                        var item = arr[i];
+                        if (item.parent_id == id) {
+                            item.level = level;
+                            data.push(item);
+                            addLevel(arr, item.id, level + 1);
+                        }
+                    }
+                };
+                addLevel(arr, id, level);
+                return data;
+            }
+
+            //根据菜单主键id获取下级菜单
+            var getChildNodes = function (arr, id) {
+                var noders = [];
+                for (var i in arr) {
+                    if (arr[i].parent_id == id) {
+                        noders.push(arr[i]);
+                    }
+                }
+                return noders;
+            }
+
+            //递归拼接菜单树
+            var html = '', spacing = 20;
+            var recursive = function (arr, id) {
+                var noders = getChildNodes(arr, id);
+                if (noders.length > 0) {
+                    for (var i in noders) {
+                        var count = getChildNodes(arr, noders[i].id).length; //子节点总数
+                        var padding = noders[i].level * spacing + 10; //子节点偏移距离
+                        html += '<div class="panel panel-default app-panel">';
+                        if (count > 0) {  //判断是否有子菜单
+                            html += '<button type="button" class="btn app-btn" data-toggle="collapse" data-target="#muen' + noders[i].id + '" style="padding-left:' + padding + 'px">';
+                            html += '<span class="glyphicon  ' + noders[i].icon + '"></span><abbr class="">' + noders[i].name + '</abbr>';
+                            html += '<span class="glyphicon glyphicon-triangle-right app-muen-icon"></span>';
+                            html += '</button>';
+                            html += '<div id="muen' + noders[i].id + '" class="collapse">';
+                            recursive(arr, noders[i].id);//递归拼接子菜单
+                            html += '</div>';
+                        }
+                        else {
+                            html += '<a href="/src/view/account.html" class="btn app-btn" style="padding-left:' + padding + 'px">';
+                            html += '<span class="glyphicon  ' + noders[i].icon + '"></span><abbr class="">' + noders[i].name + '</abbr>';
+                            html += '</a>';
+                        }
+                        html += '</div>';
+                    }
+                }
+            }
+
+            recursive(addLevel(arr, id), id);
+            return html;
+        }
+
+        var stopPropagation = function (event) {
+            window.event ? window.event.cancelBubble = true : event.stopPropagation();
+        }
+
+        $(function () {
+
+            //console.log(menuTree(data, 0))
+            $('#app-menu-accordion').html(menuTree(data, 0));
+
+            //给#app-menu-accordion下所有.app-panel的元素绑定bootstrap展开关闭事件
+            $('#app-menu-accordion').find('.app-panel').on({
+                'shown.bs.collapse': function (event) {
+                    stopPropagation(event);
+                    $(this).children('button').children('.app-muen-icon').removeClass('glyphicon-triangle-right').addClass('glyphicon-triangle-bottom');
+                },
+                'hidden.bs.collapse': function (event) {
+                    stopPropagation(event);
+                    $(this).children('button').children('.app-muen-icon').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-right');
+                },
+            });
+
+            //给#app-menu-accordion下所有a标签href不为空的元素绑定click事件
+            $('#app-menu-accordion').find('a[href]').on({
+                click: function (event) {
+                    var href = $(this).attr('href');//把开始的/替换掉.replace(/\//i, '')
+                    event.preventDefault();//阻止默认行为
+                    window.location.href = '#' + href;
+                    $('#app-body').children('iframe').attr('src', href);
+
+                }
+            })
+
+            //计算下拉菜单 高度不够显示滚动条
+            var $dropdown = null, dropdownSub = null;
+            $('#app-user').on({
+                'show.bs.dropdown': function () {
+                    $dropdown = $(this).children('button').next();
+                    $dropdown.addClass('fade');
+                },
+                'shown.bs.dropdown': function () {
+                    var windowHeight = $(window).outerHeight();
+
+                    var dropdownHeight = $dropdown.outerHeight();
+                    var dropdownWidth = $dropdown.outerWidth();
+                    var dropdownTop = $dropdown.position().top;
+
+                    var result = windowHeight - dropdownTop - dropdownHeight;
+
+                    if (result <= 0) {
+                        $dropdown.outerHeight(windowHeight - dropdownTop - 4)
+                        $dropdown.outerWidth(dropdownWidth + 15)
+                    }
+                    $dropdown.addClass('in');
+                },
+                'hide.bs.dropdown': function () {
+                    $dropdown.attr('style', '');
+                    $dropdown.removeClass('fade in');
+                    $(dropdownSub).toggle();
+                }
+            });
+            //获取子菜单 显示到外面 防止显示滚动条时候隐藏了二级菜单
+            $('#app-user').on({
+                click: function () {
+                    dropdownSub = $(this).data('sub');
+                    if ($('#app-user').children(dropdownSub).length === 0) {
+                        $('#app-user').append($(this).next(dropdownSub).prop('outerHTML'));
+                        $(this).next(dropdownSub).remove();
+                    }
+                    else {
+                        $(dropdownSub).toggle();
+                    }
+                    $(dropdownSub).css({ 'margin-right': $dropdown.outerWidth() + 'px' });
+                }
+            }, '[data-toggle="dropdown-submenu"]');
+
+            //进入/退出 全屏
+            $('#app-full-screen').on({
+                click: function () {
+                    var status = $(this).data('status');
+                    if ('normal' === status) {//进入全屏
+                        $(this).data('status', 'amplifying');
+                        $(this).children('span').removeClass('glyphicon-fullscreen').addClass('glyphicon-resize-small');
+                        var docEle = document.documentElement;
+                        if (docEle.requestFullscreen) {
+                            docEle.requestFullscreen();
+                        } else if (docEle.mozRequestFullScreen) {
+                            docEle.mozRequestFullScreen();
+                        } else if (docEle.webkitRequestFullScreen) {
+                            docEle.webkitRequestFullScreen();
+                        }
+                    } else if ('amplifying' === status) {//退出全屏
+                        $(this).data('status', 'normal');
+                        $(this).children('span').removeClass('glyphicon-resize-small').addClass('glyphicon-fullscreen');
+                        var doc = document;
+                        if (doc.exitFullscreen) {
+                            doc.exitFullscreen();
+                        } else if (doc.mozCancelFullScreen) {
+                            doc.mozCancelFullScreen();
+                        } else if (doc.webkitCancelFullScreen) {
+                            doc.webkitCancelFullScreen();
+                        }
+                    }
+                }
+            });
+
+            //指定要操作的元素的click事件停止传播—定义属性值data-stopPropagation的元素点击时停止传播事件
+            $("body").on({
+                click: function (event) {
+                    stopPropagation(event);
+                }
+            }, '[data-stopPropagation="true"]');
+
+
+        });
+
+    </script>
+</head>
+<body>
+    <div id="app-left">
+        <h2 id="app-menu-logo">
+            <a href="/src/framework.html">
+                <span class="visible-lg-inline hidden">Universal.System</span>
+                <span class="visible-lg">U</span>
+            </a>
+        </h2>
+        <div id="app-menu-scroll">
+            <div id="app-menu-accordion">
+                <!--动态菜单-->
+            </div>
+        </div>
+    </div>
+    <div id="app-right">
+        <div id="app-header" class="app-header">
+            <div class="app-header-info">
+                <button id="app-menu-status">
+                    <span class="glyphicon glyphicon-indent-right" data-hover="glyphicon glyphicon-indent-left"></span>
+                </button>
+
+                <div class="app-header-info-right">
+                    <div id="app-full-screen" data-status="normal">
+                        <span class="glyphicon glyphicon-fullscreen"></span>
+                    </div>
+                    <div id="app-user">
+                        <button class="dropdown-toggle app-user-dropdown" data-toggle="dropdown">
+                            <img src="https://file.iviewui.com/dist/a0e88e83800f138b94d2414621bd9704.png" />
+                            <strong>系统管理员</strong>
+                            <span class="glyphicon glyphicon-triangle-bottom"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right app-user-menu" role="menu">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">消息中心</a>
+                            </li>
+                            <li role="presentation">
+                                <a class="dropdown app-not-select" tabindex="-1" data-stopPropagation="true" data-toggle="dropdown-submenu" data-sub="#submenu-language">
+                                    系统语言
+                                    <span class="glyphicon glyphicon-triangle-right app-muen-icon"></span>
+                                </a>
+                                <ul class="dropdown-menu pull-right app-dropdown-submenu" id="submenu-language">
+                                    <li role="presentation">
+                                        <a href="#">中文（简体）</a>
+                                        <a href="#">中文（繁體）</a>
+                                        <a href="#">English</a>
+                                        <a href="#">日本語</a>
+                                        <a href="#">한국어</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">项目开源地址</a>
+                            </li>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">退出登陆</a>
+                            </li>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation" class="app-copyright text-center">
+                                <img src="/src/img/u.png" width="35" /><br />
+                                <span>
+                                    Universal.System<br />
+                                    v1.0.0
+                                </span>
+                                <p>
+                                    <a class="pull-left" target="_blank" href="#">关于我们</a>
+                                    <a class="pull-right" target="_blank" href="#">更新日志</a>
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="app-header-clip">
+                <ul class="nav nav-tabs">
+                    <li>
+                        <a href="#">
+                            <span class="glyphicon glyphicon-grain"></span>欢迎
+                            <span class="glyphicon glyphicon-remove" onclick="javascript: alert();"></span>
+                        </a>
+                    </li>
+                    <li><a href="#">项目开源地址<span class="glyphicon glyphicon-remove"></span></a></li>
+                    <li><a href="#">iOS</a></li>
+                    <li><a href="#">VB.Net</a></li>
+                    <li><a href="#">Java</a></li>
+                    <li><a href="#">PHP</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="app-body">
+            <iframe src="/src/view/index.html" frameborder="0"></iframe>
+        </div>
+    </div>
+</body>
+</html>

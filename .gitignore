@@ -1,0 +1,40 @@
+## 详细见https://github.com/github/gitignore
+## https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
+
+## 忽略Visual Studio临时文件、构建结果和
+## 由流行的Visual Studio插件生成的文件。
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.log
+
+
+
+
+# 特定于用户的文件(MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+
+##忽略所有子目录下面wwwroot下面的js下面的所有子目录后缀为.mim.js的文件
+**/wwwroot/[Jj][Ss]/**/*.min.js
+
+##wwwroot/
+
+# Visual Studio 2015 cache/options directory
+.vs/
+# Uncomment if you have tasks that create the
