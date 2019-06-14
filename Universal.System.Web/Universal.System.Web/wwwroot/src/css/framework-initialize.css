@@ -160,15 +160,6 @@ a {
         color: #4d4d4d;
     }
 
-.app-header-clip {
-    min-height: 42px;
-    box-sizing: border-box;
-    border: 1px solid #ddd;
-    border-left: none;
-    border-right: none;
-    box-shadow: 0 2px 3px 0 rgba(0,0,0,.1);
-}
-
 #app-body {
     min-height: 30px;
 }
@@ -217,7 +208,7 @@ a {
     }
 
 .app-user-dropdown {
-    display:block;
+    display: block;
     background-color: transparent;
     border: none;
     height: 100%;
@@ -242,8 +233,13 @@ a {
     padding: 2px 0;
     top: 60px;
     min-width: 185px;
-    overflow-y:auto;
+    overflow-y: auto;
 }
+
+    .app-user-menu .badge {
+        background-color: #ed4014;
+        /*margin:-2px 0 0 5px;*/
+    }
 
     .app-user-menu > li > a {
         padding: 6px 25px;
@@ -265,6 +261,7 @@ a {
     .app-copyright span {
         padding-top: 3px;
     }
+
     .app-copyright img,
     .app-copyright span {
         display: inline-block;
@@ -278,4 +275,131 @@ a {
 .app-dropdown-submenu {
     display: none;
     box-shadow: 0 3px 6px rgba(0,0,0,.175);
+}
+/*退出登陆模态框*/
+#app-logout .modal-header,
+#app-logout .modal-body,
+#app-logout .modal-footer {
+    padding: 10px;
+    border-bottom: none;
+    border-top: none;
+}
+
+#app-logout .modal-dialog {
+    max-width: 400px;
+}
+
+#app-logout .modal-title {
+    font-size: 16px;
+}
+
+    #app-logout .modal-title > .glyphicon {
+        font-size: 22px;
+        top: 5px;
+        color: #FF9900;
+    }
+/*多标签*/
+#app-header-clip {
+    position: relative;
+    min-height: 42px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-left: none;
+    border-right: none;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,.1);
+}
+
+    #app-header-clip .app-header-clip-left {
+        margin-right: 90px;
+    }
+
+    #app-header-clip .app-header-clip-right {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 41px;
+        line-height: 41px;
+    }
+
+        #app-header-clip .app-header-clip-right a {
+            display: inline-block;
+            padding: 0 10px 0 10px;
+            cursor: pointer;
+            transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
+        }
+
+            #app-header-clip .app-header-clip-right a:hover {
+                background-color: #F0F0F0;
+            }
+
+    #app-header-clip .nav-tabs > li > a:hover {
+        border-color: transparent;
+        background-color: transparent;
+    }
+
+    #app-header-clip .nav > li > a:focus,
+    #app-header-clip .nav > li > a:hover {
+        border-color: transparent;
+        background-color: transparent;
+    }
+
+
+    #app-header-clip .nav-tabs,
+    #app-header-clip .nav-tabs > li > a {
+        border: none;
+    }
+
+        #app-header-clip .nav-tabs > li > a {
+            margin-right: 0;
+            border-radius: 0;
+            padding: 0 20px 0 15px;
+            height: 40px;
+            line-height: 40px;
+        }
+
+            #app-header-clip .nav-tabs > li > a > .glyphicon {
+                margin-right: 5px;
+            }
+
+        #app-header-clip .nav-tabs > li > .close {
+            position: absolute;
+            font-size: 18px;
+            right: 5px;
+            top: 0;
+        }
+
+            #app-header-clip .nav-tabs > li > .close:hover {
+                color: #ff0000;
+            }
+
+    #app-header-clip .app-clip-selected {
+        border-bottom: 2px solid #007465;
+        box-sizing: border-box;
+    }
+
+        #app-header-clip .app-clip-selected > a {
+            color: #007465;
+            font-weight: bold;
+        }
+/*提示工具*/
+.tooltip .tooltip-inner {
+    white-space: nowrap;
+    font-size:12px;
+    background-color: #575D6A;
+}
+.tooltip.top .tooltip-arrow,
+.tooltip.top-left .tooltip-arrow,
+.tooltip.top-right .tooltip-arrow {
+    border-top-color: #575D6A;
+}
+.tooltip.right .tooltip-arrow {
+    border-right-color: #575D6A;
+}
+.tooltip.left .tooltip-arrow {
+    border-left-color: #575D6A;
+}
+.tooltip.bottom .tooltip-arrow,
+.tooltip.bottom-left .tooltip-arrow,
+.tooltip.bottom-right .tooltip-arrow {
+    border-bottom-color: #575D6A;
 }
