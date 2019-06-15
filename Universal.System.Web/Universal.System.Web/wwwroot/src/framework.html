@@ -81,7 +81,7 @@
                         var padding = noders[i].level * spacing + 10; //子节点偏移距离
                         html += '<div class="panel panel-default app-panel">';
                         if (count > 0) {  //判断是否有子菜单
-                            html += '<button type="button" class="btn app-btn" data-toggle="collapse" data-target="#muen' + noders[i].id + '" style="padding-left:' + padding + 'px">';
+                            html += '<button type="button" class="btn app-btn app-transition-350" data-toggle="collapse" data-target="#muen' + noders[i].id + '" style="padding-left:' + padding + 'px">';
                             html += '<span class="glyphicon  ' + noders[i].icon + '"></span><abbr class="">' + noders[i].name + '</abbr>';
                             html += '<span class="glyphicon glyphicon-triangle-right app-muen-icon"></span>';
                             html += '</button>';
@@ -90,7 +90,7 @@
                             html += '</div>';
                         }
                         else {
-                            html += '<a href="' + noders[i].link + '" class="btn app-btn" style="padding-left:' + padding + 'px">';
+                            html += '<a href="' + noders[i].link + '" class="btn app-btn app-transition-350" style="padding-left:' + padding + 'px">';
                             html += '<span class="glyphicon  ' + noders[i].icon + '"></span><abbr class="">' + noders[i].name + '</abbr>';
                             html += '</a>';
                         }
@@ -289,11 +289,12 @@
                 </button>
 
                 <div class="app-header-info-right">
-                    <div id="app-full-screen" data-status="normal" data-toggle="tooltip" data-placement="auto" title="全屏">
+                    <div id="app-full-screen" class="app-transition-350" data-status="normal" data-toggle="tooltip" data-placement="auto" title="全屏">
                         <span class="glyphicon glyphicon-fullscreen"></span>
                     </div>
-                    <div id="app-user">
-                        <button class="dropdown-toggle app-user-dropdown" data-toggle="dropdown">
+
+                    <div id="app-user" class="app-transition-350">
+                        <button class="dropdown-toggle app-user-dropdown app-transition-350" data-toggle="dropdown">
                             <img src="https://file.iviewui.com/dist/a0e88e83800f138b94d2414621bd9704.png" />
                             <strong>系统管理员</strong>
                             <span class="glyphicon glyphicon-triangle-bottom"></span>
@@ -342,42 +343,32 @@
             </div>
             <div id="app-header-clip">
                 <div class="app-header-clip-left">
-                    <ul class="nav nav-tabs">
-                        <li>
-                            <a href="#">
-                                <span class="glyphicon glyphicon-backward"></span>
-                                欢迎
-                            </a>
-                            <span class="close">&times;</span>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="glyphicon glyphicon-grain"></span>
-                                首页
-                            </a>
-                            <span class="close">&times;</span>
-                        </li>
-                        <li class="app-clip-selected">
-                            <a href="#">
-                                <span class="glyphicon glyphicon-grain"></span>
-                                项目开源地址
-                            </a>
-                            <span class="close">&times;</span>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="glyphicon glyphicon-grain"></span>
-                                消息中心
-                            </a>
-                            <span class="close">&times;</span>
-                        </li>
-                    </ul>
+                    <button class="pull-left app-nav-left app-transition-350">
+                        <span class="glyphicon glyphicon-menu-left"></span>
+                    </button>
+                    <button class="pull-right app-nav-right app-transition-350">
+                        <span class="glyphicon glyphicon-menu-right"></span>
+                    </button>
+                    <div class="app-nav-center">
+                        <ul class="nav nav-tabs">
+                            <li class="app-clip-selected">
+                                <a href="#">
+                                    <span class="glyphicon glyphicon-backward"></span>
+                                    欢迎
+                                </a>
+                                <span class="close">&times;</span>
+                            </li>
+                        </ul>
+                        <div class="app-clip-border">
+                            <p></p>
+                        </div>
+                    </div>
                 </div>
                 <div class="app-header-clip-right">
-                    <a data-toggle="tooltip" data-placement="bottom" title="刷新本页">
+                    <a data-toggle="tooltip" class="app-transition-350" data-placement="bottom" title="刷新本页">
                         <span class="glyphicon glyphicon-repeat"></span>
                     </a>
-                    <a data-toggle="tooltip" data-placement="bottom" title="在新标签页中打开">
+                    <a data-toggle="tooltip" class="app-transition-350" data-placement="bottom" title="在新标签页中打开">
                         <span class="glyphicon glyphicon-new-window"></span>
                     </a>
                 </div>
