@@ -324,8 +324,9 @@ a {
         color: #888888;
         /*display:none;*/
     }
-    #app-header-clip .app-nav-center {
-        
+    #app-header-clip #app-nav-center {
+        margin-left: 25px;
+        margin-right: 25px;
     }
     #app-header-clip .app-header-clip-right {
         /*消除display: inline-block;间隙*/

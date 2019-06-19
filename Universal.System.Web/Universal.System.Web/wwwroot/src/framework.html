@@ -11,236 +11,24 @@
     <link href="/src/favicon.ico" rel="icon" type="image/x-icon" />
     <link href="/src/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
-    <!--<link href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />-->
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
 
     <link href="css/framework-initialize.css" rel="stylesheet" />
-    <script src="js/framework-initialize.js"></script>
+    <script src="js/framework-load.js"></script>
     <script>
-        var data = [
-            { id: 1, name: "欢迎使用", link: "/src/view/welcome.html", icon: "glyphicon-send", parent_id: 0 },
-            { id: 2, name: "系统设置", link: "/src/view/index.html", icon: "glyphicon-wrench", parent_id: 0 },
-            { id: 3, name: "菜单管理", link: "#", icon: "glyphicon-th-list", parent_id: 2 },
-            { id: 4, name: "图标管理", link: "#", icon: "glyphicon-tag", parent_id: 2 },
-            { id: 5, name: "权限管理", link: "#", icon: "glyphicon-lock", parent_id: 2 },
-            { id: 6, name: "角色管理", link: "/src/view/account.html", icon: "glyphicon-user", parent_id: 2 },
-            { id: 7, name: "用户管理", link: "#", icon: "glyphicon-volume-down", parent_id: 2 },
-            { id: 8, name: "无极限菜单", link: "#", icon: "glyphicon-link", parent_id: 0 },
-            { id: 9, name: "更多", link: "#", icon: "glyphicon-option-horizontal", parent_id: 0 },
-            { id: 10, name: "二级菜单", link: "#", icon: "glyphicon-folder-close", parent_id: 8 },
-            { id: 11, name: "三级菜单", link: "#", icon: "glyphicon-eye-open", parent_id: 10 },
-            { id: 12, name: "四级菜单", link: "#", icon: "glyphicon-leaf", parent_id: 11 },
-            { id: 13, name: "五级菜单", link: "#", icon: "glyphicon-warning-sign", parent_id: 12 },
-            { id: 14, name: "六级菜单", link: "#", icon: "glyphicon-bookmark", parent_id: 13 },
-            { id: 15, name: "七级菜单", link: "#", icon: "glyphicon-tags", parent_id: 14 },
-        ];
-
-        /**
-         * 无极限菜单树
-         * @param arr 菜单数组信息
-         * @param id 菜单主键id
-         */
-        var menuTree = function (arr, id) {
-            //处理数据 给菜单等级
-            var addLevel = function (arr, id) {
-                var data = [], level = 0;
-                var addLevel = function (arr, id, level) {
-                    for (var i in arr) {
-                        var item = arr[i];
-                        if (item.parent_id == id) {
-                            item.level = level;
-                            data.push(item);
-                            addLevel(arr, item.id, level + 1);
-                        }
-                    }
-                };
-                addLevel(arr, id, level);
-                return data;
-            }
-
-            //根据菜单主键id获取下级菜单
-            var getChildNodes = function (arr, id) {
-                var noders = [];
-                for (var i in arr) {
-                    if (arr[i].parent_id == id) {
-                        noders.push(arr[i]);
-                    }
-                }
-                return noders;
-            }
-
-            //递归拼接菜单树
-            var html = '', spacing = 20;
-            var recursive = function (arr, id) {
-                var noders = getChildNodes(arr, id);
-                if (noders.length > 0) {
-                    for (var i in noders) {
-                        var count = getChildNodes(arr, noders[i].id).length; //子节点总数
-                        var padding = noders[i].level * spacing + 10; //子节点偏移距离
-                        html += '<div class="panel panel-default app-panel">';
-                        if (count > 0) {  //判断是否有子菜单
-                            html += '<button type="button" class="btn app-btn app-transition-350" data-toggle="collapse" data-target="#muen' + noders[i].id + '" style="padding-left:' + padding + 'px">';
-                            html += '<span class="glyphicon  ' + noders[i].icon + '"></span><abbr class="">' + noders[i].name + '</abbr>';
-                            html += '<span class="glyphicon glyphicon-triangle-right app-muen-icon"></span>';
-                            html += '</button>';
-                            html += '<div id="muen' + noders[i].id + '" class="collapse">';
-                            recursive(arr, noders[i].id);//递归拼接子菜单
-                            html += '</div>';
-                        }
-                        else {
-                            html += '<a href="' + noders[i].link + '" class="btn app-btn app-transition-350" style="padding-left:' + padding + 'px">';
-                            html += '<span class="glyphicon  ' + noders[i].icon + '"></span><abbr class="">' + noders[i].name + '</abbr>';
-                            html += '</a>';
-                        }
-                        html += '</div>';
-                    }
+        try {
+            var urlhash = window.location.hash;
+            if (!urlhash.match("fromapp")) {
+                if ((navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i))) {
+                    window.location = "http://m.com";
                 }
             }
-
-            recursive(addLevel(arr, id), id);
-            return html;
         }
+        catch (error) {
 
-        var stopPropagation = function (event) {
-            window.event ? window.event.cancelBubble = true : event.stopPropagation();
         }
-
-        $(function () {
-            //console.log(menuTree(data, 0))
-            $('#app-menu-accordion').html(menuTree(data, 0));
-
-            //指定要操作的元素的click事件停止传播—定义属性值data-stopPropagation的元素点击时停止传播事件
-            $("body").on({
-                click: function (event) {
-                    stopPropagation(event);
-                }
-            }, '[data-stop="evnet"]');
-
-            //提示工具
-            $('[data-toggle="tooltip"]').tooltip({
-                container: 'body',
-                delay: {
-                    show: 300,
-                    hide: 100
-                }
-            });
-
-            //给#app-menu-accordion下所有.app-panel的元素绑定bootstrap展开关闭事件
-            $('#app-menu-accordion').on({
-                'shown.bs.collapse': function (event) {
-                    stopPropagation(event);
-                    $(this).children('button').children('.app-muen-icon').removeClass('glyphicon-triangle-right').addClass('glyphicon-triangle-bottom');
-                },
-                'hidden.bs.collapse': function (event) {
-                    stopPropagation(event);
-                    $(this).children('button').children('.app-muen-icon').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-right');
-                },
-            }, '.app-panel');
-
-            //给#app-menu-accordion下所有a标签href不为空的元素绑定click事件
-            $('#app-menu-accordion').on({
-                click: function (event) {
-                    var href = $(this).attr('href');//把开始的/替换掉.replace(/\//i, '')
-                    event.preventDefault();//阻止默认行为
-                    window.location.href = '#' + href;
-                    $('#app-body').children('iframe').attr('src', href);
-
-                }
-            }, 'a[href]')
-
-            //计算下拉菜单 高度不够显示滚动条
-            var $dropdown = null, dropdownSub = null;
-            $('#app-user').on({
-                'show.bs.dropdown': function () {
-                    $dropdown = $(this).children('button').next();
-                    $dropdown.addClass('fade');
-                },
-                'shown.bs.dropdown': function () {
-                    var windowHeight = $(window).outerHeight();
-
-                    var dropdownHeight = $dropdown.outerHeight();
-                    var dropdownWidth = $dropdown.outerWidth();
-                    var dropdownTop = $dropdown.position().top;
-
-                    var result = windowHeight - dropdownTop - dropdownHeight;
-
-                    if (result <= 0) {
-                        $dropdown.outerHeight(windowHeight - dropdownTop - 4)
-                        $dropdown.outerWidth(dropdownWidth + 15)
-                    }
-                    $dropdown.addClass('in');
-                },
-                'hide.bs.dropdown': function () {
-                    $dropdown.attr('style', '');
-                    $dropdown.removeClass('fade in');
-                    $(dropdownSub).toggle();
-                }
-            });
-            //获取子菜单 显示到外面 防止显示滚动条时候隐藏了二级菜单
-            $('#app-user').on({
-                click: function () {
-                    dropdownSub = $(this).data('sub');
-                    if ($('#app-user').children(dropdownSub).length === 0) {
-                        $('#app-user').append($(this).next(dropdownSub).prop('outerHTML'));
-                        $(this).next(dropdownSub).remove();
-                    }
-                    else {
-                        $(dropdownSub).toggle();
-                    }
-                    $(dropdownSub).css({ 'margin-right': $dropdown.outerWidth() + 'px' });
-                }
-            }, '[data-toggle="dropdown-submenu"]');
-
-            //进入/退出 全屏
-            $('#app-full-screen').on({
-                click: function () {
-                    var status = $(this).data('status');
-                    if ('normal' === status) {//进入全屏
-                        $(this).data('status', 'amplifying');
-                        $(this).children('span').removeClass('glyphicon-fullscreen').addClass('glyphicon-resize-small');
-                        var docEle = document.documentElement;
-                        if (docEle.requestFullscreen) {
-                            docEle.requestFullscreen();
-                        } else if (docEle.mozRequestFullScreen) {
-                            docEle.mozRequestFullScreen();
-                        } else if (docEle.webkitRequestFullScreen) {
-                            docEle.webkitRequestFullScreen();
-                        }
-                    } else if ('amplifying' === status) {//退出全屏
-                        $(this).data('status', 'normal');
-                        $(this).children('span').removeClass('glyphicon-resize-small').addClass('glyphicon-fullscreen');
-                        var doc = document;
-                        if (doc.exitFullscreen) {
-                            doc.exitFullscreen();
-                        } else if (doc.mozCancelFullScreen) {
-                            doc.mozCancelFullScreen();
-                        } else if (doc.webkitCancelFullScreen) {
-                            doc.webkitCancelFullScreen();
-                        }
-                    }
-                }
-            });
-
-
-            //多标签选项卡事件
-            $('#app-header-clip').on({
-                click: function () {
-                    $(this).siblings().removeClass('app-clip-selected');
-                    $(this).addClass('app-clip-selected')
-                }
-            }, '.nav>li');
-
-            $('#app-header-clip').on({
-                click: function () {
-                    $(this).parent().remove()
-                }
-            }, '.close');
-
-
-        });
-
     </script>
 </head>
 <body>
@@ -343,16 +131,23 @@
             </div>
             <div id="app-header-clip">
                 <div class="app-header-clip-left">
+                    <!--左右切换按钮-->
                     <button class="pull-left app-nav-left app-transition-350">
                         <span class="glyphicon glyphicon-menu-left"></span>
                     </button>
                     <button class="pull-right app-nav-right app-transition-350">
                         <span class="glyphicon glyphicon-menu-right"></span>
                     </button>
-                    <div class="app-nav-center">
+                    <div id="app-nav-center">
                         <ul class="nav nav-tabs">
                             <li class="app-clip-selected">
-                                <a href="#">
+                                <a href="#" data-stop="default">
+                                    <span class="glyphicon glyphicon-home"></span>
+                                    首页
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" data-stop="default">
                                     <span class="glyphicon glyphicon-backward"></span>
                                     欢迎
                                 </a>
@@ -363,6 +158,7 @@
                             <p></p>
                         </div>
                     </div>
+
                 </div>
                 <div class="app-header-clip-right">
                     <a data-toggle="tooltip" class="app-transition-350" data-placement="bottom" title="刷新本页">
