@@ -3,6 +3,7 @@
  * 首页框架不可少 必须放到Jquery后面
  */
 
+//判读是否手机端 
 try {
     var urlhash = window.location.hash;
     console.log(urlhash)

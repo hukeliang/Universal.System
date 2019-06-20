@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace Universal.System.WebApi.Controllers
 {
@@ -18,12 +19,17 @@ namespace Universal.System.WebApi.Controllers
     //[ApiController]//在Controller上添加了ApiController特性就会启用默认的模型验证返回结果。
     public class UserController : ControllerBase
     {
+        /// <summary>
+        /// 日志记录
+        /// </summary>
+        private readonly ILogger<UserController> _logger;
 
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
 
-        public UserController(IConfiguration configuration, IUserService userService, Service.HomeService homeService)
+        public UserController(ILogger<UserController> logger, IConfiguration configuration, IUserService userService, Service.HomeService homeService)
         {
+            _logger = logger;
             _configuration = configuration;
             _userService = userService;
         }
@@ -39,7 +45,12 @@ namespace Universal.System.WebApi.Controllers
         //[ServiceFilter(typeof(ValidateTokenAttribute))]
         public IActionResult Login([FromBody, Bind(nameof(UserModel.UserName), nameof(UserModel.Password))] UserModel requestModel)
         {
-            _userService.QueryUser("","");
+            _logger.LogDebug("这是一个Debug日志");
+            _logger.LogWarning("这是一个警告日志");
+            _logger.LogInformation("这是一个信息日志");
+            _logger.LogError("这是一个错误日志");
+
+            //_userService.QueryUser("","");
             //BindAttribute特性对JSON数据无效
             IList<ParameterDescriptor> parameterDescriptors = ControllerContext.ActionDescriptor.Parameters;
             //获取BindAttribute

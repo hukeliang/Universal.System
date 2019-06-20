@@ -36,6 +36,7 @@ namespace Universal.System.DataAccess
             });
 
         UserModel IUserDataAccess.QueryUser() => new UserModel();
+
         public dynamic QueryUser(string f)
         {
             dynamic fasdf= _dbConnection.Query<dynamic>("SELECT * FROM Usertb_US");

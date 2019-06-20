@@ -111,9 +111,9 @@ namespace Universal.System.Service
         /// <returns></returns>
         UserModel IUserService.QueryUser(string account, string password)
         {
-            _userDataAccess.QueryUser("");
+            
 
-            return _userDataAccess.QueryUser("","");
+            return _userDataAccess.QueryUser();
         }
     }
 }

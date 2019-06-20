@@ -31,7 +31,7 @@ namespace Universal.System.WebApi
             // 替换系统默认Controller创建器  ps：必须放到 AddMvc 前面注册
             services.Replace(ServiceDescriptor.Transient<IControllerActivator, ServiceBasedControllerActivator>());
 
-            services.AddDbConnectionMaster("Data Source=192.168.1.254;Initial Catalog=US_Local;User ID=it;Password=hk999888;");
+            services.AddDbConnectionMaster("Data Source=;Initial Catalog=US_Local;User ID=it;Password=;");
 
             services.AddMvc(options => options.Filters.Add<ValidateTokenAttribute>())
                 .AddJsonOptions(options => options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss")

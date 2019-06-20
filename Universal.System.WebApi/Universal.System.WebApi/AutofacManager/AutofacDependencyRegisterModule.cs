@@ -56,7 +56,7 @@ namespace Universal.System.WebApi.AutofacManager
 
                 foreach (Type item in genericTypes)
                 {
-                    //注册仓储泛型
+                    //注册泛型
                     builder.RegisterGeneric(assembly.GetType($"{item.Namespace}.{item.Name}")).AsImplementedInterfaces().AsSelf().InstancePerDependency();
                 }
 
