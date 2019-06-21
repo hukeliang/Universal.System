@@ -11,7 +11,7 @@ namespace Universal.System.WebApi.Controllers
     public class PermissionsController : ControllerBase
     {
         [HttpGet]
-        [Route("{int:id}")]
+        [Route("{id:int}")]
         public IActionResult GetPermissions(int? id)
         {
             //获取用户权限值

@@ -20,6 +20,13 @@ namespace Universal.System.WebApi.Controllers
             //获取菜单
             return Ok();
         }
+        [HttpGet]
+        [Route("{id:int}")]
+        public IActionResult GetEenu(int? id)
+        {
+            //获取菜单
+            return Ok();
+        }
 
         [HttpPost]
         public IActionResult AddEenu(MenuModel menuModel)
