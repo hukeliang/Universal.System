@@ -1,7 +1,7 @@
 
 ## Universal.System
 
-![Image text](https://github.com/hukeliang/Universal.System/blob/master/Universal.System.Web/Universal.System.Web/wwwroot/src/img/u.png) 一个通用的后台权限框架
+![Image text](https://github.com/hukeliang/Universal.System/blob/master/Universal.System.Web/Universal.System.Web/wwwroot/src/img/u.png) 一个通用的后台框架
 
 Universal.System.Web
 
