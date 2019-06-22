@@ -20,5 +20,7 @@
     <ProjectReference Include="..\Universal.System.Service.Interface\Universal.System.Service.Interface.csproj" />
     <ProjectReference Include="..\Universal.System.Service\Universal.System.Service.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Content Update="nlog.config" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

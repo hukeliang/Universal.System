@@ -1,12 +1,12 @@
-﻿using Universal.System.Common;
-using Universal.System.Service.Interface;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Reflection;
+using Universal.System.Common;
+using Universal.System.Service.Interface;
 
 namespace Universal.System.WebApi.Filter
 {
@@ -18,11 +18,11 @@ namespace Universal.System.WebApi.Filter
     {
         public int Order => 0;
 
-        private readonly IUserService _userService;
+        private readonly IAuthService _authService;
 
-        public ValidateTokenAttribute(IUserService userService)
+        public ValidateTokenAttribute(IAuthService authService)
         {
-            _userService = userService;
+            _authService = authService;
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
@@ -58,7 +58,7 @@ namespace Universal.System.WebApi.Filter
                 }
 
                 //token错误
-                if (!_userService.ValidateToken(info.Substring(prefix.Length)))
+                if (!_authService.ValidateToken(info.Substring(prefix.Length)))
                 {
                     context.Result = jsonResult;
                     return;

@@ -33,10 +33,22 @@ namespace Universal.System.WebApi
 
             services.AddDbConnectionMaster("Data Source=;Initial Catalog=US_Local;User ID=it;Password=;");
 
+            #region 配置跨域处理
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigin", builder =>
+                {
+                    builder.WithOrigins(Configuration["AllowCors:AllowOrigin"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();//指定处理cookie
+                });
+            });
+            #endregion
+
             services.AddMvc(options => options.Filters.Add<ValidateTokenAttribute>())
                 .AddJsonOptions(options => options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss")
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
 
             return services.AutofacInitialize(Configuration);
         }
@@ -49,8 +61,11 @@ namespace Universal.System.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("AllowOrigin");
+
             //提供对静态资源的访问
             app.UseStaticFiles();
+
             app.UseMvc();
         }
     }

@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace Universal.System.WebApi.Extensions
 {
-    public static class ServiceExtensions
+    public static class DbExtensions
     {
         /// <summary>
         /// 数据库链接对象注入 IDbConnection

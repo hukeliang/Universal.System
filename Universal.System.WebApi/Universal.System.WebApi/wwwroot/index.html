@@ -18,7 +18,7 @@
                 type: 'post',
                 dataType: "json",
                 contentType: "application/json",
-                url: '/api/v1/user/login',
+                url: '/api/auth',
                 data: JSON.stringify(postUser),
                 beforeSend: function (XHR) {
                     //发送ajax请求之前向http的head里面加入验证信息
