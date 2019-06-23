@@ -31,10 +31,7 @@ namespace Universal.System.WebApi.Filter
             }
         }
 
-        public void OnActionExecuted(ActionExecutedContext context)
-        {
-
-        }
+        public virtual void OnActionExecuted(ActionExecutedContext context) { }
 
     }
 }

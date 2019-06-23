@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Universal.System.Common;
 using Universal.System.Entity.Model;
 using Universal.System.Service.Interface;
@@ -14,6 +9,7 @@ namespace Universal.System.WebApi.Controllers
     /// <summary>
     /// 提供对菜单的 CRUD
     /// </summary>
+    [Produces("application/json")]
     [Route("api/menu")]
     public class MenuController : ControllerBase
     {
@@ -70,9 +66,17 @@ namespace Universal.System.WebApi.Controllers
         /// <param name="menuModel"></param>
         /// <returns></returns>
         [HttpPut]
+        [ValidateModel]
         public IActionResult UpdateMenu(MenuModel menuModel)
         {
-            return Ok();
+            ResponseResult responseResult = CommonFactory.CreateResponseResult;
+
+            if (_menuService.UpdateMenu(menuModel))
+            {
+                return Ok(responseResult.Success("菜单修改成功"));
+            }
+
+            return Ok(responseResult.Failed("菜单修改失败"));
         }
 
         /// <summary>
@@ -83,7 +87,14 @@ namespace Universal.System.WebApi.Controllers
         [HttpDelete]
         public IActionResult DeleteMenu(int? id)
         {
-            return Ok();
+            ResponseResult responseResult = CommonFactory.CreateResponseResult;
+
+            if (_menuService.DeleteMenu(id))
+            {
+                return Ok(responseResult.Success("菜单删除成功"));
+            }
+
+            return Ok(responseResult.Failed("菜单删除失败"));
         }
     }
 }

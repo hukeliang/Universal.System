@@ -13,5 +13,19 @@ namespace Universal.System.DataAccess.Interface
         /// <param name="menuModel"></param>
         /// <returns></returns>
         bool AddMenu(MenuModel menuModel);
+
+        /// <summary>
+        /// 根据id删除菜单
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        bool DeleteMenu(int? id);
+
+        /// <summary>
+        /// 修改菜单信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        bool UpdateMenu(MenuModel menuModel);
     }
 }

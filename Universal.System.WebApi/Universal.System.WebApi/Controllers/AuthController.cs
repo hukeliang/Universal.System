@@ -39,6 +39,11 @@ namespace Universal.System.WebApi.Controllers
             _authService = authService;
         }
 
+        /// <summary>
+        /// 验证账号密码 签发token
+        /// </summary>
+        /// <param name="requestModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         //[ServiceFilter(typeof(ValidateTokenAttribute))]

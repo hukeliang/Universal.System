@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Universal.System.WebApi</name>
+    </assembly>
+    <members>
+        <member name="T:Universal.System.WebApi.AutofacManager.AutofacDependencyRegisterModule">
+            <summary>
+            Autofac模块化注入
+            </summary>
+        </member>
+        <member name="P:Universal.System.WebApi.AutofacExtensions.Container">
+            <summary>
+            Autofac IOC容器
+            </summary>
+        </member>
+        <member name="M:Universal.System.WebApi.AutofacExtensions.AutofacInitialize(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Autofac IOC容器初始化
+            </summary>
+            <param name="config"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Universal.System.WebApi.Controllers.AuthController">
+            <summary>
+            提供用户的身份授权
+            </summary>
+        </member>
+        <member name="F:Universal.System.WebApi.Controllers.AuthController._logger">
+            <summary>
+            日志记录
+            </summary>
+        </member>
+        <member name="M:Universal.System.WebApi.Controllers.AuthController.GetAuth(Universal.System.Entity.Model.UserModel)">
+            <summary>
+            验证账号密码 签发token
+            </summary>
+            <param name="requestModel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Universal.System.WebApi.Controllers.MenuController">
+            <summary>
+            提供对菜单的 CRUD
+            </summary>
+        </member>
+        <member name="M:Universal.System.WebApi.Controllers.MenuController.GetEenu">
+            <summary>
+            获取菜单
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Universal.System.WebApi.Controllers.MenuController.GetEenu(System.Nullable{System.Int32})">
+            <summary>
+            根据id获取菜单
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Universal.System.WebApi.Controllers.MenuController.AddEenu(Universal.System.Entity.Model.MenuModel)">
+            <summary>
+            新增菜单
+            </summary>
+            <param name="menuModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Universal.System.WebApi.Controllers.MenuController.UpdateMenu(Universal.System.Entity.Model.MenuModel)">
+            <summary>
+            更新菜单
+            </summary>
+            <param name="menuModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Universal.System.WebApi.Controllers.MenuController.DeleteMenu(System.Nullable{System.Int32})">
+            <summary>
+            删除菜单
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Universal.System.WebApi.Controllers.UserController._logger">
+            <summary>
+            日志记录
+            </summary>
+        </member>
+        <member name="M:Universal.System.WebApi.Extensions.DbExtension.AddDbConnectionMaster(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)">
+            <summary>
+            数据库链接对象注入 IDbConnection
+            </summary>
+            <param name="services"></param>
+            <param name="master"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Universal.System.WebApi.Extensions.ExceptionExtension">
+            <summary>
+            全局异常拓展
+            </summary>
+        </member>
+        <member name="M:Universal.System.WebApi.Extensions.ExceptionExtension.UseInternalServerError(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            使用500错误全局捕获
+            </summary>
+            <param name="app"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Universal.System.WebApi.Extensions.ModelExtension.ToErrorMessageALl(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary)">
+            <summary>
+            验证模型错误,返回全部错误
+            </summary>
+            <param name="modelStateDictionary"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Universal.System.WebApi.Extensions.ModelExtension.ToErrorMessage(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary)">
+            <summary>
+            验证模型 返回单个错误
+            </summary>
+            <param name="modelStateDictionary"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Universal.System.WebApi.Filter.ValidateModelAttribute">
+            <summary>
+            验证模型
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:Universal.System.WebApi.Filter.ValidateTokenAttribute">
+            <summary>
+            验证Token
+            </summary>
+        </member>
+        <member name="T:Universal.System.WebApi.Middleware.InternalServerErrorMiddleware">
+            <summary>
+            全局异常捕获中间件
+            </summary>
+        </member>
+        <member name="M:Universal.System.WebApi.Program.Main(System.String[])">
+            <summary>
+            Application Run
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="T:Universal.System.WebApi.Startup">
+            <summary>
+            参考 https://dnczeus.codedefault.com/rbac/user
+            </summary>
+        </member>
+    </members>
+</doc>
