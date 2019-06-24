@@ -17,7 +17,10 @@ namespace Universal.System.Service
         {
             _menuDataAccess = menuDataAccess;
         }
-
+        MenuModel IMenuService.GetMenu()
+        {
+            throw new global::System.NotImplementedException();
+        }
         /// <summary>
         /// 添加菜单
         /// </summary>
@@ -37,7 +40,6 @@ namespace Universal.System.Service
         {
             return _menuDataAccess.DeleteMenu(id);
         }
-
         /// <summary>
         /// 修改菜单信息
         /// </summary>

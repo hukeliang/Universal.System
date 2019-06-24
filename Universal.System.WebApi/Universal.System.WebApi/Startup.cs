@@ -57,14 +57,14 @@ namespace Universal.System.WebApi
                     Title = "Universal.System.WebApi 接口说明",
                     Version = "v1",
                     Description = "Universal.System.WebApi  ASP.NET Core Web API",
-                    TermsOfService = "None",
-                    Contact = new Contact
+                    TermsOfService = "None",//服务条款
+                    Contact = new Contact //作者信息
                     {
                         Name = "hukeliang",
                         Email = "732213520@qq,com",
                         //Url = "链接地址"
                     },
-                    //License = new License
+                    //License = new License //许可证
                     //{
                     //    Name = "许可证名字",
                     //    Url = "链接地址"
@@ -105,7 +105,10 @@ namespace Universal.System.WebApi
             // 在这里面可以注入
             app.UseSwaggerUI(options =>
             {
-                options.InjectJavascript("/swagger/ui/swagger_zh_CN.js"); // 加载中文包
+                //Swashbuckle.AspNetCore
+
+                //options.RoutePrefix = string.Empty;//要在应用的根 (http://localhost:<port>/) 处提供 Swagger UI，请将 RoutePrefix 属性设置为空字符串
+                options.InjectOnCompleteJavaScript("/swagger/ui/zh_CN.js"); // 加载中文包
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Universal.System.WebApi API V1");//必须将发布目录的文件夹权限打开（允许写入，读取）
             });
 

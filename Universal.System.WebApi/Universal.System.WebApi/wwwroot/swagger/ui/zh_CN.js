@@ -1,4 +1,18 @@
 ﻿'use strict';
+
+/** 
+ * Translator for documentation pages. 
+ * 
+ * To enable translation you should include one of language-files in your index.html 
+ * after <script src='lang/translator.js' type='text/javascript'></script>. 
+ * For example - <script src='lang/ru.js' type='text/javascript'></script> 
+ * 
+ * If you wish to translate some new texsts you should do two things: 
+ * 1. Add a new phrase pair ("New Phrase": "New Translation") into your language file (for example lang/ru.js). It will be great if you add it in other language files too. 
+ * 2. Mark that text it templates this way <anyHtmlTag data-sw-translate>New Phrase</anyHtmlTag> or <anyHtmlTag data-sw-translate value='New Phrase'/>. 
+ * The main thing here is attribute data-sw-translate. Only inner html, title-attribute and value-attribute are going to translate. 
+ * 
+ */
 window.SwaggerTranslator = {
     _words: [],
 
@@ -11,40 +25,6 @@ window.SwaggerTranslator = {
         });
     },
 
-    setControllerSummary: function () {
-
-        try {
-            console.log($("#input_baseUrl").val());
-            $.ajax({
-                type: "get",
-                async: true,
-                url: $("#input_baseUrl").val(),
-                dataType: "json",
-                success: function (data) {
-
-                    var summaryDict = data.ControllerDesc;
-                    console.log(summaryDict);
-                    var id, controllerName, strSummary;
-                    $("#resources_container .resource").each(function (i, item) {
-                        id = $(item).attr("id");
-                        if (id) {
-                            controllerName = id.substring(9);
-                            try {
-                                strSummary = summaryDict[controllerName];
-                                if (strSummary) {
-                                    $(item).children(".heading").children(".options").first().prepend('<li class="controller-summary" style="color:green;" title="' + strSummary + '">' + strSummary + '</li>');
-                                }
-                            } catch (e) {
-                                console.log(e);
-                            }
-                        }
-                    });
-                }
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    },
     _tryTranslate: function (word) {
         return this._words[$.trim(word)] !== undefined ? this._words[$.trim(word)] : word;
     },
@@ -106,7 +86,8 @@ window.SwaggerTranslator.learn({
     "from path": "从路径",
     "server returned": "服务器返回"
 });
+
+
 $(function () {
     window.SwaggerTranslator.translate();
-    window.SwaggerTranslator.setControllerSummary();
 });

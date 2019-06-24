@@ -34,8 +34,7 @@ namespace Universal.System.Entity.Model
         /// 隶属哪个菜单
         /// </summary>
         [Required]
-        public long MenuID { get; set; }
-
+        public int MenuID { get; set; }
         /// <summary>
         /// 一个用户对应多个权限
         /// 一个权限分给多个用户

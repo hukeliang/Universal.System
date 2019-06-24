@@ -8,6 +8,11 @@ namespace Universal.System.DataAccess.Interface
     public interface IMenuDataAccess
     {
         /// <summary>
+        /// 根据用户信息获取响应权限值
+        /// </summary>
+        /// <returns></returns>
+        MenuModel GetMenu();
+        /// <summary>
         /// 添加菜单
         /// </summary>
         /// <param name="menuModel"></param>

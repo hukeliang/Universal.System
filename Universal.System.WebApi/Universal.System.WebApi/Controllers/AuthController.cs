@@ -42,10 +42,16 @@ namespace Universal.System.WebApi.Controllers
         /// <summary>
         /// 验证账号密码 签发token
         /// </summary>
+        /// <remarks>
+        /// 例子:
+        /// Post api/auth
+        /// </remarks>
         /// <param name="requestModel"></param>
-        /// <returns></returns>
+        /// <returns>返回token</returns>
+        /// <response code="200">成功</response>
         [HttpPost]
         [AllowAnonymous]
+        [ProducesResponseType(200)]
         //[ServiceFilter(typeof(ValidateTokenAttribute))]
         public IActionResult GetAuth([FromBody, Bind(nameof(UserModel.UserName), nameof(UserModel.Password))] UserModel requestModel)
         {

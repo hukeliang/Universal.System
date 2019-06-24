@@ -10,7 +10,7 @@ namespace Universal.System.Entity
         /// 主键ID
         /// </summary>
         [Key]
-        public long ID { get; set; }
+        public int ID { get; set; }
 
         /// <summary>
         /// 创建日期
