@@ -1,24 +1,32 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Universal.System.Common.CustomAttribute;
 using Universal.System.DataAccess.Interface;
 using Universal.System.Entity.Model;
-using Dapper;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Universal.System.DataAccess
 {
     /// <summary>
     /// 权限
     /// </summary>
-    [DependencyRegister(Type = RegisterType.InstancePerLifetimeScope)]
+    [DependencyRegister(Type = RegisterType.InstancePerDependency)]
     public class PermissionsDataAccess : IPermissionsDataAccess
     {
-        private readonly IDataAccessBase<UserModel> _dataAccessBase;
+        private readonly IDataAccessBase<PermissionsModel> _dbContext;
 
-        public PermissionsDataAccess(IDataAccessBase<UserModel> dataAccessBase)
+        public PermissionsDataAccess(IDataAccessBase<PermissionsModel> dataAccessBase)
         {
-            _dataAccessBase = dataAccessBase;
+            _dbContext = dataAccessBase;
+        }
+
+        /// <summary>
+        /// 添加权限值
+        /// </summary>
+        /// <param name="permissions"></param>
+        /// <returns></returns>
+        public bool AddPermissions(PermissionsModel permissions)
+        {
+            return _dbContext.Insert(permissions);
         }
 
         /// <summary>
@@ -26,23 +34,37 @@ namespace Universal.System.DataAccess
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        async Task<List<PermissionsModel>> IPermissionsDataAccess.GetPermissionsByUserIdAsync(int id)
+        public IQueryable<PermissionsModel> GetPermissions(int id)
         {
-            string sql = @"select PTB.* from Sys.RoleTB RTB 
-                           left join Sys.RolePermissions RPTB on RTB.id = RPTB.RoleID 
-                           left join Sys.PermissionsTB    PTB on PTB.id = RPTB.PermissionsID
-                           where RTB.id in(select RTB.id from Sys.UserTB UTB 
-                                           left join Sys.UserRoleTB URTB on UTB.id = URTB.UserID 
-                                           left join Sys.RoleTB      RTB on RTB.id = URTB.RoleID
-                                           where UTB.id=@UID)
-                           union select PTB.* from Sys.UserTB UTB 
-                           left join Sys.UserPermissions UPTB on UTB.id = UPTB.UserID 
-                           left join Sys.PermissionsTB    PTB on PTB.id = UPTB.PermissionsID
-                           where UTB.id=@UID)";
+            //用户角色的权限
+            var userRolePermissions = from ptb in _dbContext.Db.Permissions
+                                      join rptb in _dbContext.Db.RolePermissions on ptb.ID equals rptb.RoleID
+                                      join rtb in _dbContext.Db.Role on rptb.RoleID equals rtb.ID
+                                      where (from rtb_son in _dbContext.Db.Role
+                                             join urtb in _dbContext.Db.UserRole on rtb_son.ID equals urtb.RoleID
+                                             join utb in _dbContext.Db.User on urtb.UserID equals utb.ID
+                                             where utb.ID == id
+                                             select rtb_son.ID).Contains(rtb.ID)
+                                      select ptb;
+            //用户权限
+            var userPermissions = from ptb in _dbContext.Db.Permissions
+                                  join uptb in _dbContext.Db.UserPermissions on ptb.ID equals uptb.PermissionsID
+                                  join utb in _dbContext.Db.User on uptb.UserID equals utb.ID
+                                  where utb.ID == id
+                                  select ptb;
+            //合并
+            var result = userRolePermissions.Union(userPermissions);
+            return result;
+        }
 
-            IEnumerable<PermissionsModel> result = await _dataAccessBase.DBConnection.QueryAsync<PermissionsModel>(sql, new { UID = id });
-
-            return result.ToList();
+        /// <summary>
+        /// 根据权限值获取权限信息
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public PermissionsModel GetPermissions(string value)
+        {
+            return _dbContext.FindSingle(item => item.PermissionsValue == value);
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using Universal.System.Common.CustomAttribute;
 using Universal.System.DataAccess.Interface;
+using Universal.System.Entity.ContextModel;
 using Universal.System.Entity.Model;
 using Universal.System.Service.Interface;
 
@@ -19,15 +20,43 @@ namespace Universal.System.Service
         {
             _permissionsDataAccess = permissionsDataAccess;
         }
-
         /// <summary>
         ///  根据用户id获取权限
         /// </summary>
         /// <param name="id">用户id</param>
         /// <returns></returns>
-        async Task<List<PermissionsModel>> IPermissionsService.GetPermissionsByUserIdAsync(int id)
+        List<PermissionsModel> IPermissionsService.GetPermissions(int id)
         {
-            return await _permissionsDataAccess.GetPermissionsByUserIdAsync(id);
+            IQueryable<PermissionsModel> permissions = _permissionsDataAccess.GetPermissions(id);
+
+            return permissions.ToList();
+        }
+        /// <summary>
+        /// 判读权限值是否存在
+        /// </summary>
+        /// <param name="id">用户id</param>
+        /// <returns></returns>
+        public bool GetPermissionsIsExist(string value)
+        {
+            PermissionsModel permissions = _permissionsDataAccess.GetPermissions(value);
+
+            return permissions == null;
+        }
+
+        /// <summary>
+        /// 添加权限值
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool AddPermissions(PermissionsRequestModel permissionsRequest)
+        {
+            PermissionsModel permissions = new PermissionsModel()
+            {
+                PermissionsName = permissionsRequest.PermissionsName,
+                PermissionsValue = permissionsRequest.PermissionsValue,
+                Remark = permissionsRequest.Remark,
+            };
+            return _permissionsDataAccess.AddPermissions(permissions);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace Universal.System.WebApi.Controllers
         /// <param name="menuModel"></param>
         /// <returns></returns>
         [HttpPost]
-        [ValidateModel]
+        [ValidateRequestModel]
         public IActionResult AddEenu(MenuModel menuModel)
         {
             ResponseResult responseResult = CommonFactory.CreateResponseResult;
@@ -66,15 +66,15 @@ namespace Universal.System.WebApi.Controllers
         /// <param name="menuModel"></param>
         /// <returns></returns>
         [HttpPut]
-        [ValidateModel]
+        [ValidateRequestModel]
         public IActionResult UpdateMenu(MenuModel menuModel)
         {
             ResponseResult responseResult = CommonFactory.CreateResponseResult;
 
-            if (_menuService.UpdateMenu(menuModel))
-            {
-                return Ok(responseResult.Success("菜单修改成功"));
-            }
+            //if (_menuService.UpdateMenu(menuModel))
+            //{
+            //    return Ok(responseResult.Success("菜单修改成功"));
+            //}
 
             return Ok(responseResult.Failed("菜单修改失败"));
         }
@@ -88,11 +88,11 @@ namespace Universal.System.WebApi.Controllers
         public IActionResult DeleteMenu(int? id)
         {
             ResponseResult responseResult = CommonFactory.CreateResponseResult;
-
-            if (_menuService.DeleteMenu(id))
-            {
-                return Ok(responseResult.Success("菜单删除成功"));
-            }
+            
+            //if (_menuService.DeleteMenu(id))
+            //{
+            //    return Ok(responseResult.Success("菜单删除成功"));
+            //}
 
             return Ok(responseResult.Failed("菜单删除失败"));
         }

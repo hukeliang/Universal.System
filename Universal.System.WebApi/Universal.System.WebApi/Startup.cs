@@ -1,15 +1,20 @@
-﻿using Universal.System.WebApi.Extensions;
-using Universal.System.WebApi.Filter;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System;
+using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
 using System.IO;
+using System.Text;
+using Universal.System.Entity;
+using Universal.System.WebApi.Extensions;
+using Universal.System.WebApi.Filter;
 
 namespace Universal.System.WebApi
 {
@@ -33,7 +38,16 @@ namespace Universal.System.WebApi
             // 替换系统默认Controller创建器  ps：必须放到 AddMvc 前面注册
             services.Replace(ServiceDescriptor.Transient<IControllerActivator, ServiceBasedControllerActivator>());
 
-            services.AddDbConnectionMaster(Configuration["Connection:ConnectionStrings"]);
+            #region  注册数据库服务
+
+            //services.AddDbConnectionMaster(Configuration["Connection:ConnectionStrings"]);
+
+            services.AddEntityFrameworkSqlServer().AddDbContext<UniversalSystemDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration["Connection:ConnectionStrings"]);
+            });
+
+            #endregion
 
             #region 配置跨域处理
             services.AddCors(options =>
@@ -47,8 +61,7 @@ namespace Universal.System.WebApi
                 });
             });
             #endregion
-
-
+            
             #region Swagger UI API 接口说明文档
             services.AddSwaggerGen(options =>
             {

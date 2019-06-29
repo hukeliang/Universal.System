@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Linq;
 using System.Text;
 
@@ -36,7 +37,6 @@ namespace Universal.System.WebApi.Extensions
         /// <returns></returns>
         public static string ToErrorMessage(this ModelStateDictionary modelStateDictionary)
         {
-
             foreach (ModelStateEntry modelstate in modelStateDictionary.Values)
             {
                 if (modelstate != null && modelstate.ValidationState == ModelValidationState.Invalid)
@@ -45,6 +45,26 @@ namespace Universal.System.WebApi.Extensions
                 }   
             }
 
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// 根据Bind特性绑定 验证模型 返回单个错误
+        /// </summary>
+        /// <param name="modelStateDictionary"></param>
+        /// <returns></returns>
+        public static string ToErrorMessageByBindAttribute(this ModelStateDictionary modelStateDictionary, BindAttribute bindAttribute)
+        {
+            //Model验证
+            foreach (string key in bindAttribute.Include)
+            {
+                ModelStateEntry modelstate = modelStateDictionary[key];
+
+                if (modelstate != null && modelstate.ValidationState == ModelValidationState.Invalid)
+                {
+                    return modelstate.Errors.FirstOrDefault().ErrorMessage;
+                }
+            }
             return string.Empty;
         }
     }

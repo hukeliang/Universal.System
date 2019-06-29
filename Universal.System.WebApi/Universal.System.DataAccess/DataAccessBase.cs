@@ -1,10 +1,11 @@
-﻿using Universal.System.DataAccess.Interface;
-using Dapper;
-using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
-using Universal.System.Common.CustomAttribute;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using Universal.System.Common.CustomAttribute;
+using Universal.System.DataAccess.Interface;
+using Universal.System.Entity;
 
 namespace Universal.System.DataAccess
 {
@@ -16,224 +17,170 @@ namespace Universal.System.DataAccess
     public class DataAccessBase<TEntity> : IDataAccessBase<TEntity> where TEntity : class, new()
     {
         /// <summary>
-        /// 操作数据库链接
+        /// 数据库上下文
         /// </summary>
-        private readonly IDbConnection _dbConnection;
+        public UniversalSystemDbContext Db { get; }
 
         /// <summary>
-        /// 操作数据库链接
+        /// 指定类型的实体对象集合
         /// </summary>
-        IDbConnection IDataAccessBase<TEntity>.DBConnection => _dbConnection;
+        private readonly DbSet<TEntity> _dbSet;
 
-        static DataAccessBase()
+
+        public DataAccessBase(UniversalSystemDbContext dbContext)
         {
-            SimpleCRUD.SetDialect(SimpleCRUD.Dialect.SQLServer);  
+            Db = dbContext;
+
+            _dbSet = Db.Set<TEntity>();
         }
 
-        public DataAccessBase(IDbConnection dbConnection)
-        {
-            _dbConnection = dbConnection;
-        }
 
 
         #region 同步方法
-
         /// <summary>
-        /// 通过主键获取实体对象
+        /// 插入指定对象到数据库中
         /// </summary>
-        /// <param name="id">主键ID</param>
-        /// <returns></returns>
-        public TEntity Get<TKey>(TKey id) => _dbConnection.Get<TEntity>(id);
+        /// <param name="t">指定的对象</param>
+        /// <returns>执行成功返回<c>true</c>，否则为<c>false</c></returns>
+        public virtual bool Insert(TEntity entity)
+        {
+            _dbSet.Add(entity);
+
+            return Db.SaveChanges() > 0;
+        }
 
         /// <summary>
-        /// 获取所有的数据
+        /// 根据指定对象的ID,从数据库中删除指定对象
         /// </summary>
-        /// <returns></returns>
-        public IEnumerable<TEntity> GetList() => _dbConnection.GetList<TEntity>();
+        /// <param name="id">对象的ID</param>
+        /// <returns>执行成功返回<c>true</c>，否则为<c>false</c>。</returns>
+        public virtual bool Delete(int id)
+        {
+            TEntity obj = _dbSet.Find(id);
+
+            _dbSet.Remove(obj);
+
+            return Db.SaveChanges() > 0;
+        }
 
         /// <summary>
-        /// 执行具有条件的查询，并将结果映射到强类型列表
-        /// </summary>
-        /// <param name="whereConditions">条件</param>
-        /// <returns></returns>
-        public IEnumerable<TEntity> GetList(object whereConditions) => _dbConnection.GetList<TEntity>(whereConditions);
-
-        /// <summary>
-        /// 带参数的查询满足条件的数据
-        /// </summary>
-        /// <param name="conditions">条件</param>
-        /// <param name="parameters">参数</param>
-        public IEnumerable<TEntity> GetList(string conditions, object parameters = null) => _dbConnection.GetList<TEntity>(conditions, parameters);
-
-        /// <summary>
-        /// 使用where子句执行查询，并将结果映射到具有Paging的强类型List
-        /// </summary>
-        /// <param name="pageNumber">页码</param>
-        /// <param name="rowsPerPage">每页显示数据</param>
-        /// <param name="conditions">查询条件</param>
-        /// <param name="orderby">排序</param>
-        /// <param name="parameters">参数</param>
-        /// <returns></returns>
-        public IEnumerable<TEntity> GetListPaged(int pageNumber, int rowsPerPage, string conditions, string orderby, object parameters = null) => _dbConnection.GetListPaged<TEntity>(pageNumber, rowsPerPage, conditions, orderby, parameters);
-
-        /// <summary>
-        /// 插入一条记录并返回主键值(自增类型返回主键值，否则返回null)
+        /// 根据实体删除
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public int? Insert(TEntity entity) => _dbConnection.Insert(entity);
+        public bool Delete(TEntity entity)
+        {
+            Db.Entry(entity).State = EntityState.Deleted;
+
+            return Db.SaveChanges() > 0;
+
+        }
+        /// <summary>
+        /// 更新对象属性到数据库中
+        /// </summary>
+        /// <param name="t">指定的对象</param>
+        /// <param name="key">主键的值</param>
+        /// <returns>执行成功返回<c>true</c>，否则为<c>false</c></returns>
+        public virtual bool Update(TEntity entity, object key)
+        {
+            bool result = false;
+
+            TEntity existing = _dbSet.Find(key);
+
+            if (existing != null)
+            {
+                Db.Entry(existing).CurrentValues.SetValues(entity);
+
+                result = Db.SaveChanges() > 0;
+            }
+            return result;
+        }
+        
+        /// <summary>
+        /// 根据id查询
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public TEntity Find(int id)
+        {
+            return _dbSet.Find(id);
+        }
+        /// <summary>
+        /// 根据条件查询数据库,并返回对象集合
+        /// </summary>
+        /// <param name="match"></param>
+        /// <returns></returns>
+        public ICollection<TEntity> Find(Expression<Func<TEntity, bool>> match)
+        {
+            return _dbSet.Where(match).ToList();
+        }
+       
+        /// <summary>
+        /// 根据条件查询数据库,并返回对象集合
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="match"></param>
+        /// <param name="orderBy"></param>
+        /// <returns></returns>
+        public ICollection<TEntity> Find<TKey>(Expression<Func<TEntity, bool>> match, Expression<Func<TEntity, TKey>> orderBy)
+        {
+            return _dbSet.Where(match).OrderBy(orderBy).ToList();
+        }
+        /// <summary>
+        /// 根据条件查询数据库,如果存在返回第一个对象
+        /// </summary>
+        /// <param name="match">条件表达式</param>
+        /// <returns>存在则返回指定的第一个对象,否则返回默认值</returns>
+        public virtual TEntity FindSingle(Expression<Func<TEntity, bool>> match)
+        {
+            return _dbSet.SingleOrDefault(match);
+        }
 
         /// <summary>
-        /// 更新一条数据并返回影响的行数
+        /// 根据条件查询数据库,是否存在
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns>影响的行数</returns>
-        public int Update(TEntity entity) => _dbConnection.Update(entity);
+        /// <returns></returns>
+        public bool FindAny(Expression<Func<TEntity, bool>> match)
+        {
+            return _dbSet.AsNoTracking().Any(match);
+        }
+        /// <summary>
+        /// 根据条件查询数据库,并返回对象集合(用于分页数据显示)
+        /// </summary>
+        /// <param name="match">条件表达式</param>
+        /// <param name="orderBy">排序表达式</param>
+        /// <param name="pageIndex">第几页</param>
+        /// <param name="pageSize">分页大小</param>
+        /// <returns>指定对象的集合</returns>
+        public virtual ICollection<TEntity> FindWithPager<TKey>(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, TKey>> orderBy, int pageSize, int pageIndex)
+        {
+            int excludedRows = (pageIndex - 1) * pageSize;
+
+            return _dbSet.Where(where).OrderByDescending(orderBy).Skip(excludedRows).Take(pageSize).ToList();
+        }
 
         /// <summary>
-        /// 根据实体主键删除一条数据
+        /// 执行原生Sql语句
         /// </summary>
-        /// <param name="id">主键</param>
-        /// <returns>影响的行数</returns>
-        public int Delete<TKey>(TKey id) => _dbConnection.Delete(id);
-
-        /// <summary>
-        /// 根据实体删除一条数据
-        /// </summary>
-        /// <param name="entity">实体</param>
-        /// <returns>返回影响的行数</returns>
-        public int Delete(TEntity entity) => _dbConnection.Delete(entity);
-
-        /// <summary>
-        /// 条件删除多条记录
-        /// </summary>
-        /// <param name="whereConditions">条件</param>
-        /// <param name="transaction">事务</param>
-        /// <param name="commandTimeout">超时时间</param>
-        /// <returns>影响的行数</returns>
-        public int DeleteList(object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null) => _dbConnection.DeleteList<TEntity>(whereConditions, transaction, commandTimeout);
-
-        /// <summary>
-        /// 使用where子句删除多个记录
-        /// </summary>
-        /// <param name="conditions">where子句</param>
-        /// <param name="parameters">参数</param>
-        /// <param name="transaction">事务</param>
-        /// <param name="commandTimeout">超时时间</param>
-        /// <returns>影响的行数</returns>
-        public int DeleteList(string conditions, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null) => _dbConnection.DeleteList<TEntity>(conditions, parameters, transaction, commandTimeout);
-
-        /// <summary>
-        /// 满足条件的记录数量
-        /// </summary>
-        /// <param name="conditions"></param>
+        /// <param name="sql"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public int RecordCount(string conditions = "", object parameters = null) => _dbConnection.RecordCount<TEntity>(conditions, parameters);
+        public virtual ICollection<TEntity> SqlQuery(string sql, params string[] parameters)
+        {
+            IQueryable<TEntity> query = _dbSet.FromSql(sql, parameters);
+
+            return query.ToList();
+        }
 
         #endregion
+
 
         #region 异步
 
-        /// <summary>
-        /// 通过主键获取实体对象
-        /// </summary>
-        /// <param name="id">主键ID</param>
-        /// <returns></returns>
-        public Task<TEntity> GetAsync<TKey>(TKey id) => _dbConnection.GetAsync<TEntity>(id);
-
-        /// <summary>
-        /// 获取所有的数据
-        /// </summary>
-        /// <returns></returns>
-        public Task<IEnumerable<TEntity>> GetListAsync() => _dbConnection.GetListAsync<TEntity>();
-
-        /// <summary>
-        /// 执行具有条件的查询，并将结果映射到强类型列表
-        /// </summary>
-        /// <param name="whereConditions">条件</param>
-        /// <returns></returns>
-        public Task<IEnumerable<TEntity>> GetListAsync(object whereConditions) => _dbConnection.GetListAsync<TEntity>(whereConditions);
-
-        /// <summary>
-        /// 带参数的查询满足条件的数据
-        /// </summary>
-        /// <param name="conditions">条件</param>
-        /// <param name="parameters">参数</param>
-        /// <returns></returns>
-        public Task<IEnumerable<TEntity>> GetListAsync(string conditions, object parameters = null) => _dbConnection.GetListAsync<TEntity>(conditions, parameters);
-
-        /// <summary>
-        /// 使用where子句执行查询，并将结果映射到具有Paging的强类型List
-        /// </summary>
-        /// <param name="pageNumber">页码</param>
-        /// <param name="rowsPerPage">每页显示数据</param>
-        /// <param name="conditions">查询条件</param>
-        /// <param name="orderby">排序</param>
-        /// <param name="parameters">参数</param>
-        /// <returns></returns>
-        public Task<IEnumerable<TEntity>> GetListPagedAsync(int pageNumber, int rowsPerPage, string conditions, string orderby, object parameters = null)
-            => _dbConnection.GetListPagedAsync<TEntity>(pageNumber, rowsPerPage, conditions, orderby, parameters);
-
-        /// <summary>
-        /// 插入一条记录并返回主键值
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public Task<int?> InsertAsync(TEntity entity) => _dbConnection.InsertAsync(entity);
-
-        /// <summary>
-        /// 更新一条数据并返回影响的行数
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns>影响的行数</returns>
-        public Task<int> UpdateAsync(TEntity entity) => _dbConnection.UpdateAsync(entity);
-
-        /// <summary>
-        /// 根据实体主键删除一条数据
-        /// </summary>
-        /// <param name="id">主键</param>
-        /// <returns>影响的行数</returns>
-        public Task<int> DeleteAsync<TKey>(TKey id) => _dbConnection.DeleteAsync<TEntity>(id);
-
-        /// <summary>
-        /// 根据实体删除一条数据
-        /// </summary>
-        /// <param name="entity">实体</param>
-        /// <returns>返回影响的行数</returns>
-        public Task<int> DeleteAsync(TEntity entity) => _dbConnection.DeleteAsync(entity);
-
-        /// <summary>
-        /// 条件删除多条记录
-        /// </summary>
-        /// <param name="whereConditions">条件</param>
-        /// <param name="transaction">事务</param>
-        /// <param name="commandTimeout">超时时间</param>
-        /// <returns>影响的行数</returns>
-        public Task<int> DeleteListAsync(object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null) => _dbConnection.DeleteListAsync<TEntity>(whereConditions, transaction, commandTimeout);
-
-        /// <summary>
-        /// 使用where子句删除多个记录
-        /// </summary>
-        /// <param name="conditions">wher子句</param>
-        /// <param name="parameters">参数</param>
-        /// <param name="transaction">事务</param>
-        /// <param name="commandTimeout">超时时间</param>
-        /// <returns>影响的行数</returns>
-        public Task<int> DeleteListAsync(string conditions, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null) => DeleteListAsync(conditions, parameters, transaction, commandTimeout);
-
-        /// <summary>
-        /// 满足条件的记录数量
-        /// </summary>
-        /// <param name="conditions"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public Task<int> RecordCountAsync(string conditions = "", object parameters = null) => _dbConnection.RecordCountAsync<TEntity>(conditions, parameters);
-
 
         #endregion
 
-        #region IDisposable Support
+        #region IDisposable Support 垃圾回收
 
         private bool disposedValue = false; // 要检测冗余调用
         protected virtual void Dispose(bool disposing)
@@ -243,8 +190,7 @@ namespace Universal.System.DataAccess
                 if (disposing)
                 {
                     // TODO: 释放托管状态(托管对象)。
-                    _dbConnection?.Close();
-                    _dbConnection?.Dispose();
+                    Db?.Dispose();
 
                     // TODO: 如果使用Autofac等IOC容器貌似会自动释放对象
                     Console.Out.WriteLine("对象被释放");

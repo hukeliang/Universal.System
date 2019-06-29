@@ -1,15 +1,20 @@
-﻿using Universal.System.Entity.Other;
+﻿using Universal.System.Entity.Enum;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Universal.System.Entity
 {
-    public class ModelBase
+    /// <summary>
+    /// Model 基类
+    /// </summary>
+    public class BaseModel
     {
         /// <summary>
         /// 主键ID
         /// </summary>
         [Key]
+        [Column(Order = 0)]
         public int ID { get; set; }
 
         /// <summary>

@@ -36,7 +36,7 @@ namespace Universal.System.Service
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        bool IMenuService.DeleteMenu(int? id)
+        bool IMenuService.DeleteMenu(int id)
         {
             return _menuDataAccess.DeleteMenu(id);
         }
@@ -45,9 +45,9 @@ namespace Universal.System.Service
         /// </summary>
         /// <param name="menuModel"></param>
         /// <returns></returns>
-        bool IMenuService.UpdateMenu(MenuModel menuModel)
+        bool IMenuService.UpdateMenu(MenuModel menuModel, int id)
         {
-            return _menuDataAccess.UpdateMenu(menuModel);
+            return _menuDataAccess.UpdateMenu(menuModel, id);
         }
     }
 }

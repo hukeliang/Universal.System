@@ -1,5 +1,5 @@
-﻿using Universal.System.Entity.Model;
-using System;
+﻿using Universal.System.Entity.ContextModel;
+using Universal.System.Entity.Model;
 
 namespace Universal.System.Service.Interface
 {
@@ -11,7 +11,7 @@ namespace Universal.System.Service.Interface
         /// <param name="account">用户名</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        UserModel QueryUser(string account, string password);
+        UserModel GetUser(LoginRequestModel loginRequest);
 
 
     }

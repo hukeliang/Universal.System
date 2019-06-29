@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Universal.System.Entity.Model;
+using Universal.System.Entity.ContextModel;
 
 namespace Universal.System.Service.Interface
 {
@@ -15,6 +13,20 @@ namespace Universal.System.Service.Interface
         /// 根据用户Id查询权限值
         /// </summary>
         /// <returns></returns>
-       Task<List<PermissionsModel>> GetPermissionsByUserIdAsync(int id);
+        List<PermissionsModel> GetPermissions(int id);
+
+        /// <summary>
+        /// 判读权限值是否存在
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        bool GetPermissionsIsExist(string value);
+
+        /// <summary>
+        /// 添加权限值
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        bool AddPermissions(PermissionsRequestModel permissionsRequest);
     }
 }

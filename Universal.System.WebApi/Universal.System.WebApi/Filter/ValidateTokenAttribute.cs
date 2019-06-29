@@ -11,13 +11,11 @@ using Universal.System.Service.Interface;
 namespace Universal.System.WebApi.Filter
 {
     /// <summary>
-    /// 验证Token
+    /// 验证用户Token 是否登陆
     /// </summary>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public sealed class ValidateTokenAttribute : Attribute, IAuthorizationFilter, IOrderedFilter
+    public sealed class ValidateTokenAttribute : Attribute, IAuthorizationFilter
     {
-        public int Order => 0;
-
         private readonly IAuthService _authService;
 
         public ValidateTokenAttribute(IAuthService authService)
@@ -27,11 +25,9 @@ namespace Universal.System.WebApi.Filter
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            ControllerActionDescriptor controllerActionDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
-
-            AllowAnonymousAttribute allowAnonymous = controllerActionDescriptor.MethodInfo.GetCustomAttribute(typeof(AllowAnonymousAttribute), false) as AllowAnonymousAttribute;
-
-            if (allowAnonymous  == null)
+            AllowAnonymousAttribute allowAnonymous = (context.ActionDescriptor as ControllerActionDescriptor).MethodInfo.GetCustomAttribute(typeof(AllowAnonymousAttribute), false) as AllowAnonymousAttribute;
+            
+            if (allowAnonymous == null)
             {
                 const string prefix = "Bearer ";
 
@@ -39,13 +35,10 @@ namespace Universal.System.WebApi.Filter
 
                 ResponseResult responseResult = CommonFactory.CreateResponseResult;
 
-                JsonResult jsonResult = new JsonResult(responseResult.Failed("未授权的访问"));
-
                 //如果不包含授权信息
                 if (!result)
                 {
-                    context.Result = jsonResult;
-                    return;
+                    context.Result = new JsonResult(responseResult.Failed("未授权的访问")); return;
                 }
 
                 string info = authorization.ToString().Trim();
@@ -53,16 +46,15 @@ namespace Universal.System.WebApi.Filter
                 //空字符  不包含Bearer  
                 if (string.IsNullOrWhiteSpace(info) || !info.Contains(prefix))
                 {
-                    context.Result = jsonResult;
-                    return;
+                    context.Result = new JsonResult(responseResult.Failed("未授权的访问")); return;
                 }
 
                 //token错误
                 if (!_authService.ValidateToken(info.Substring(prefix.Length)))
                 {
-                    context.Result = jsonResult;
-                    return;
+                    context.Result = new JsonResult(responseResult.Failed("未授权的访问")); return;
                 }
+                
             }
 
 

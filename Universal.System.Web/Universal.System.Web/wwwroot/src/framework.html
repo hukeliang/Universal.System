@@ -17,19 +17,19 @@
 
     <link href="css/framework-initialize.css" rel="stylesheet" />
     <script src="js/framework-load.js"></script>
-    <script>
-        try {
-            var urlhash = window.location.hash;
-            if (!urlhash.match("fromapp")) {
-                if ((navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i))) {
-                    window.location = "http://m.com";
+    <!--<script>
+        $(function () {
+            //提示工具
+            $('[data-toggle="tooltip"]').tooltip({
+                container: 'body',
+                delay: {
+                    show: 300,
+                    hide: 100
                 }
-            }
-        }
-        catch (error) {
-
-        }
-    </script>
+            });
+        })
+        
+    </script>-->
 </head>
 <body>
     <!-- 模态框（Modal） -->

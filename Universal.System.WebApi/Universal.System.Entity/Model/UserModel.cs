@@ -1,4 +1,4 @@
-﻿using Universal.System.Entity.Other;
+﻿using Universal.System.Entity.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,22 +7,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Universal.System.Entity.Model
 {
     [Serializable]
-    [Table("Sys.UserTB")]
-    public  class UserModel : ModelBase
+    [Table("Sys.UserTb")]
+    public  class UserModel : BaseModel
     {
         /// <summary>
         /// 登陆用户名
         /// </summary>
-        [Required(ErrorMessage = "用户名不能为空")]
-        [StringLength(15, MinimumLength = 5, ErrorMessage = "用户名长度为{0}至{1}个字符")]
+        [Required]
         [MaxLength(50)]
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
         /// <summary>
         /// 登陆密码
         /// </summary>
-        [Required(ErrorMessage = "密码不能为空")]
-        [StringLength(20, MinimumLength = 8, ErrorMessage = "密码长度为{0}至{1}个字符")]
+        [Required]
         [MaxLength(50)]
         public string Password { get; set; }
 
@@ -44,8 +42,8 @@ namespace Universal.System.Entity.Model
         /// <summary>
         /// 账户状态
         /// </summary>
-        [EnumDataType(typeof(DataStatusEnum))]
-        public DataStatusEnum AccountStatus { get; set; } = DataStatusEnum.Normal;
+        [EnumDataType(typeof(AccountStatusEnum))]
+        public AccountStatusEnum AccountStatus { get; set; } = AccountStatusEnum.PendingReview;
 
         /// <summary>
         /// 一个用户对应多个角色

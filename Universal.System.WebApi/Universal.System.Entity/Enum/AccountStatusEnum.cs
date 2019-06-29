@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Universal.System.Entity.Other
+namespace Universal.System.Entity.Enum
 {
     /// <summary>
-    /// 数据状态
+    /// 账户状态
     /// </summary>
-    public enum DataStatusEnum
+    public enum AccountStatusEnum
     {
         /// <summary>
         /// 正常
         /// </summary>
         Normal,
-        
+
         /// <summary>
         /// 待审核
         /// </summary>
@@ -23,15 +23,10 @@ namespace Universal.System.Entity.Other
         /// 锁定
         /// </summary>
         Locked,
-        
+
         /// <summary>
         /// 禁用
         /// </summary>
         Forbidden,
-
-        /// <summary>
-        /// 已删除
-        /// </summary>
-        Delete,
     }
 }

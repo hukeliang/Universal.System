@@ -11,7 +11,7 @@ namespace Universal.System.DataAccess.Interface
         /// 根据用户信息获取响应权限值
         /// </summary>
         /// <returns></returns>
-        MenuModel GetMenu();
+        List<MenuModel> GetMenu(int id);
         /// <summary>
         /// 添加菜单
         /// </summary>
@@ -24,13 +24,13 @@ namespace Universal.System.DataAccess.Interface
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        bool DeleteMenu(int? id);
+        bool DeleteMenu(int id);
 
         /// <summary>
         /// 修改菜单信息
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        bool UpdateMenu(MenuModel menuModel);
+        bool UpdateMenu(MenuModel menuModel,int id);
     }
 }

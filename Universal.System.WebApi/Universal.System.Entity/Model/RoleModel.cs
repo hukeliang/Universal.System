@@ -1,4 +1,4 @@
-﻿using Universal.System.Entity.Other;
+﻿using Universal.System.Entity.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,8 +7,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Universal.System.Entity.Model
 {
     [Serializable]
-    [Table("Sys.RoleTB")]
-    public class RoleModel : ModelBase
+    [Table("Sys.RoleTb")]
+    public class RoleModel : BaseModel
     {
         /// <summary>
         /// 角色名字
@@ -27,8 +27,8 @@ namespace Universal.System.Entity.Model
         /// <summary>
         /// 角色状态
         /// </summary>
-        [EnumDataType(typeof(DataStatusEnum))]
-        public DataStatusEnum RoleStatus { get; set; } = DataStatusEnum.Forbidden;
+        [EnumDataType(typeof(RoleStatusEnum))]
+        public RoleStatusEnum RoleStatus { get; set; } = RoleStatusEnum.Forbidden;
 
         /// <summary>
         /// 一个用户对应多个角色  

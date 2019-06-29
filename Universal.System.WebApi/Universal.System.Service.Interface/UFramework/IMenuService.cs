@@ -24,13 +24,13 @@ namespace Universal.System.Service.Interface
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        bool DeleteMenu(int? id);
+        bool DeleteMenu(int id);
 
         /// <summary>
         /// 修改菜单信息
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        bool UpdateMenu(MenuModel menuModel);
+        bool UpdateMenu(MenuModel menuModel, int id);
     }
 }

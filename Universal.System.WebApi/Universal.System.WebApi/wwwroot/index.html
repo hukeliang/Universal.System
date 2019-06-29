@@ -5,11 +5,12 @@
     <title></title>
     <script src="https://cdn.cameronsino.com/jquery-ui-1.12.1-erp/jquery-1.11.1.min.js"></script>
     <script>
+        var token = '';
         $(function () {
 
             var postUser = {
-                UserName: "admin123",
-                PassWord: "hukeliang123456789",
+                UserName: "hukeliang",
+                PassWord: "12345678 ",
                 Email:"73221@qq.com"
             }
 
@@ -25,15 +26,32 @@
                     XHR.setRequestHeader('Authorization', 'Token'); //Token FGfFAS8FS2VH568HRTYI9OLS3C5GWRT62GSD54Y4OTINBJMAQFJUQERYNVNASGA
                 },
                 success: function (data) {
-
+                    token = data.response;
+                    console.log(data.response)
                 },
-
-
             });
+
+            $("[type='button']").on({
+                click: function () {
+                    $.ajax({
+                        type: 'get',
+                        dataType: "json",
+                        contentType: "application/json",
+                        url: '/api/permissions',
+                        beforeSend: function (XHR) {
+                            //发送ajax请求之前向http的head里面加入验证信息
+                            XHR.setRequestHeader('Authorization', 'Bearer ' + token); //Token FGfFAS8FS2VH568HRTYI9OLS3C5GWRT62GSD54Y4OTINBJMAQFJUQERYNVNASGA
+                        },
+                        success: function (data) {
+                           
+                        },
+                    });
+                }
+            })
         })
     </script>
 </head>
 <body>
-
+    <input type="button" onclick=""/>
 </body>
 </html>

@@ -328,6 +328,9 @@ a {
         margin-left: 25px;
         margin-right: 25px;
     }
+#app-nav-center a {
+    color: #666666;
+}
     #app-header-clip .app-header-clip-right {
         /*消除display: inline-block;间隙*/
         font-size: 0;
@@ -388,7 +391,7 @@ a {
     #app-header-clip .nav-tabs > li > .close {
         position: absolute;
         font-size: 18px;
-        right: 5px;
+        right: 3px;
         top: 0;
     }
 

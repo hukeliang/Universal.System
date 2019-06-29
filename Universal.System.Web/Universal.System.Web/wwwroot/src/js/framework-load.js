@@ -6,11 +6,6 @@
 //判读是否手机端 
 try {
     var urlhash = window.location.hash;
-    console.log(urlhash)
-    console.log(urlhash.match("fromapp"))
-    console.log(navigator.userAgent)
-    console.log(navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i))
-    var urlhash = window.location.hash;
     if (!urlhash.match("fromapp")) {
         if ((navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i))) {
             window.location = "http://m.com";
@@ -89,34 +84,34 @@ var menuTree = function (arr, id) {
         return false;
     }
     //递归拼接菜单树
-    var menuHtml = '', spacing = 20;
+    var menuHtml = new Array(), spacing = 20;
     var recursive = function (arr, id) {
         var noders = getChildNodes(arr, id);
         if (noders.length > 0) {
             for (var i in noders) {
                 var padding = noders[i].level * spacing + 10; //子节点偏移距离
-                menuHtml += '<div class="panel panel-default app-panel">';
+                menuHtml.push('<div class="panel panel-default app-panel">');
                 if (isChildNodes(arr, noders[i].id) > 0) {  //判断是否有子菜单
-                    menuHtml += '<button type="button" class="btn app-btn app-transition-350" data-toggle="collapse" data-target="#u-muen' + noders[i].id + '" style="padding-left:' + padding + 'px">';
-                    menuHtml += '<span class="glyphicon  ' + noders[i].icon + '"></span><abbr class="">' + noders[i].name + '</abbr>';
-                    menuHtml += '<span class="glyphicon glyphicon-triangle-right app-muen-icon"></span>';
-                    menuHtml += '</button>';
-                    menuHtml += '<div id="u-muen' + noders[i].id + '" class="collapse">';
+                    menuHtml.push('<button type="button" class="btn app-btn app-transition-350" data-toggle="collapse" data-target="#u-muen' + noders[i].id + '" style="padding-left:' + padding + 'px">');
+                    menuHtml.push('<span class="glyphicon  ' + noders[i].icon + '"></span><abbr class="">' + noders[i].name + '</abbr>');
+                    menuHtml.push('<span class="glyphicon glyphicon-triangle-right app-muen-icon"></span>');
+                    menuHtml.push('</button>');
+                    menuHtml.push('<div id="u-muen' + noders[i].id + '" class="collapse">');
                     recursive(arr, noders[i].id);//递归拼接子菜单
-                    menuHtml += '</div>';
+                    menuHtml.push('</div>');
                 }
                 else {
-                    menuHtml += '<a id="u-muen-link' + noders[i].id + '" data-stop="default" href="' + noders[i].link + '" class="btn app-btn app-transition-350" style="padding-left:' + padding + 'px">';
-                    menuHtml += '<span class="glyphicon ' + noders[i].icon + '"></span><abbr class="">' + noders[i].name + '</abbr>';
-                    menuHtml += '</a>';
+                    menuHtml.push('<a id="u-muen-link' + noders[i].id + '" data-stop="default" href="' + noders[i].link + '" class="btn app-btn app-transition-350" style="padding-left:' + padding + 'px">');
+                    menuHtml.push('<span class="glyphicon ' + noders[i].icon + '"></span><abbr class="">' + noders[i].name + '</abbr>');
+                    menuHtml.push('</a>');
                 }
-                menuHtml += '</div>';
+                menuHtml.push('</div>');
             }
         }
     }
 
     recursive(addLevel(arr, id), id);
-    return menuHtml;
+    return menuHtml.join('');
 }
 
 /**
@@ -146,48 +141,70 @@ var clipArray = [];
  * @param {string} icon
  */
 var addClip = function (id, title, href, icon) {
-    var $clip = null, clipHtml = '';
+    var $clip = null, clipHtml = new Array();
     if ($.inArray(id, clipArray) === -1) {
-
-        clipHtml += '<li data-muenId="' + id + '"><a href="' + href + '" data-stop="default"><span class="' + icon + '"></span>' + title + '</a>';
-        clipHtml += '<span class="close">&times;</span>';
-        clipHtml += '</li>';
+        clipHtml.push('<li data-muenId="' + id + '"><a href="' + href + '" data-stop="default"><span class="' + icon + '"></span>' + title + '</a>');
+        clipHtml.push('<span class="close">&times;</span>');
+        clipHtml.push('</li>');
 
         clipArray[clipArray.length] = id;
-        $('#app-nav-center .nav-tabs').append(clipHtml);
+        $('#app-nav-center .nav-tabs').append(clipHtml.join(''));
     }
     $clip = $('[data-muenId="' + id + '"]');
     $clip.siblings().removeClass('app-clip-selected');
     $clip.addClass('app-clip-selected');
 }
 
+var browserChange = function (headerHeight, logoHeight) {
+    var windowWidth = $(window).width();
+    var windowHeight = $(window).height();
+
+    $('#app-body').height(windowHeight - headerHeight);
+    $('#app-menu-scroll').height(windowHeight - logoHeight);
+}
 
 $(document).ready(function () {
+
+    browserChange($('#app-header').height(), $("#app-menu-logo").height());
+
     //添加菜单树
     $('#app-menu-accordion').html(menuTree(data, 0));
 
+
+    var browserChangeTimeout = null, media = 991, menuStatus = null;
+    // 监听游览器大小改变
+    $(window).on({
+        resize: function () {
+            clearTimeout(browserChangeTimeout);
+            browserChangeTimeout = setTimeout(function () {
+                browserChange();
+            }, 200);
+        }
+    });
+
     //指定要操作的元素的click事件停止传播—定义属性值data-stop="evnet"的元素点击时停止传播事件
-    $('html').on({
+    $('body').on({
         click: function (event) {
             stopEvent(event);
         }
     }, '[data-stop="evnet"]');
 
     //指定要操作的元素的click事件停止传播—定义属性值data-stop="default"的元素点击时阻止默认行为
-    $('html').on({
+    $('body').on({
         click: function (event) {
             event.preventDefault();//阻止默认行为
         }
     }, '[data-stop="default"]');
 
     //提示工具
-    $('html').tooltip({
+    $('body').tooltip({
+        selector: '[data-toggle="tooltip"]',
         container: 'body',
         delay: {
             show: 300,
             hide: 100
         }
-    }, '[data-toggle="tooltip"]');
+    });
 
     //给#app-menu-accordion下所有.app-panel的元素绑定bootstrap展开关闭事件
     $('#app-menu-accordion').on({
@@ -302,7 +319,10 @@ $(document).ready(function () {
     //选项卡关闭
     $('#app-nav-center').on({
         click: function () {
-            $(this).parent().remove()
+            //淡出
+            $(this).parent().fadeToggle(200, function () {
+                this.remove()
+            })
         }
     }, '.close');
 
