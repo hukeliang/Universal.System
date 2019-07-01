@@ -28,7 +28,7 @@ if (typeof jQuery === 'undefined' || typeof window.jQuery.fn.emulateTransitionEn
 var data = [
     { id: 1, name: "欢迎使用", link: "/src/view/welcome.html", icon: "glyphicon-send", parent_id: 0 },
     { id: 2, name: "系统设置", link: "/src/view/index.html", icon: "glyphicon-wrench", parent_id: 0 },
-    { id: 3, name: "菜单管理", link: "#", icon: "glyphicon-th-list", parent_id: 2 },
+    { id: 3, name: "菜单管理", link: "/src/view/menu.html", icon: "glyphicon-th-list", parent_id: 2 },
     { id: 4, name: "图标管理", link: "#", icon: "glyphicon-tag", parent_id: 2 },
     { id: 5, name: "权限管理", link: "#", icon: "glyphicon-lock", parent_id: 2 },
     { id: 6, name: "角色管理", link: "/src/view/account.html", icon: "glyphicon-user", parent_id: 2 },
@@ -84,7 +84,7 @@ var menuTree = function (arr, id) {
         return false;
     }
     //递归拼接菜单树
-    var menuHtml = new Array(), spacing = 20;
+    var menuHtml = new Array(), spacing = 20;//子菜单距离左边的距离
     var recursive = function (arr, id) {
         var noders = getChildNodes(arr, id);
         if (noders.length > 0) {
@@ -92,7 +92,7 @@ var menuTree = function (arr, id) {
                 var padding = noders[i].level * spacing + 10; //子节点偏移距离
                 menuHtml.push('<div class="panel panel-default app-panel">');
                 if (isChildNodes(arr, noders[i].id) > 0) {  //判断是否有子菜单
-                    menuHtml.push('<button type="button" class="btn app-btn app-transition" data-toggle="collapse" data-target="#u-muen' + noders[i].id + '" style="padding-left:' + padding + 'px">');
+                    menuHtml.push('<button type="button" class="btn app-btn app-transition-350" data-toggle="collapse" data-target="#u-muen' + noders[i].id + '" style="padding-left:' + padding + 'px">');
                     menuHtml.push('<span class="glyphicon  ' + noders[i].icon + '"></span><abbr class="">' + noders[i].name + '</abbr>');
                     menuHtml.push('<span class="glyphicon glyphicon-triangle-right app-muen-icon"></span>');
                     menuHtml.push('</button>');
@@ -101,7 +101,7 @@ var menuTree = function (arr, id) {
                     menuHtml.push('</div>');
                 }
                 else {
-                    menuHtml.push('<a id="u-muen-link' + noders[i].id + '" data-stop="default" href="' + noders[i].link + '" class="btn app-btn app-transition" style="padding-left:' + padding + 'px">');
+                    menuHtml.push('<a id="u-muen-link' + noders[i].id + '" data-stop="default" href="' + noders[i].link + '" class="btn app-btn app-transition-350" style="padding-left:' + padding + 'px">');
                     menuHtml.push('<span class="glyphicon ' + noders[i].icon + '"></span><abbr class="">' + noders[i].name + '</abbr>');
                     menuHtml.push('</a>');
                 }
@@ -131,7 +131,20 @@ var getGuid = function () {
     });
 }
 
-//多标签选项卡数组
+/**
+ * 从数组中删除指定元素
+ * @param {arr} 数组
+ * @param {val} 值
+ */
+var removeArrayByValue = function (arr, val) {
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] == val) {
+            arr.splice(i, 1);
+            break;
+        }
+    }
+}
+//多标签页数组
 var clipArray = [];
 /**
  * 添加多标签页
@@ -155,13 +168,7 @@ var addClip = function (id, title, href, icon) {
     $clip.addClass('app-clip-selected');
 }
 
-/**
- * 游览器宽度高度改变时改变框架容器高度和宽度
- * @param {int} headerHeight
- * @param {int} logoHeight
- */
 var browserChange = function (headerHeight, logoHeight) {
-    var windowWidth = $(window).width();
     var windowHeight = $(window).height();
 
     $('#app-body').height(windowHeight - headerHeight);
@@ -170,19 +177,20 @@ var browserChange = function (headerHeight, logoHeight) {
 
 $(document).ready(function () {
 
-    browserChange($('#app-header').height(), $("#app-menu-logo").height());
-
     //添加菜单树
     $('#app-menu-accordion').html(menuTree(data, 0));
 
+    var browserChangeTimeout = null,
+        browserHeaderHeight = $('#app-header').height(),
+        browserMenuHeight = $("#app-menu-logo").height();
 
-    var browserChangeTimeout = null, media = 991, menuStatus = null;
+    browserChange(browserHeaderHeight, browserMenuHeight);
     // 监听游览器大小改变
     $(window).on({
         resize: function () {
             clearTimeout(browserChangeTimeout);
             browserChangeTimeout = setTimeout(function () {
-                browserChange();
+                browserChange(browserHeaderHeight, browserMenuHeight);
             }, 200);
         }
     });
@@ -233,10 +241,10 @@ $(document).ready(function () {
 
             window.location.href = '#link=' + clipHref;
             addClip(clipId, clipName, clipHref, clipIcon);
-            $('#app-body').children('iframe').attr('src', clipHref);
 
+            $('#app-body').children('iframe').attr('src', clipHref);
         }
-    }, 'a[href]')
+    }, 'a[href]');
 
     //进入/退出 全屏
     $('#app-full-screen').on({
@@ -325,9 +333,10 @@ $(document).ready(function () {
     $('#app-nav-center').on({
         click: function () {
             //淡出
-            $(this).parent().fadeToggle(200, function () {
-                this.remove()
-            })
+            $(this).parent().fadeToggle(100, function () {
+                $(this).remove();
+                removeArrayByValue(clipArray, $(this).data('muenid'));
+            });
         }
     }, '.close');
 
