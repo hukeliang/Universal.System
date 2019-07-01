@@ -304,9 +304,9 @@ a {
     border-right: none;
     box-shadow: 0 2px 3px 0 rgba(0,0,0,.1);
 }
-#app-header-clip .app-header-clip-left {
-    margin-right: 70px;
-}
+    #app-header-clip .app-header-clip-left{
+        margin-right: 70px;
+    }
 
 #app-header-clip .app-header-clip-right {
     position: absolute;
@@ -325,6 +325,7 @@ a {
         /*display:none;*/
     }
     #app-header-clip #app-nav-center {
+        position:relative;
         margin-left: 25px;
         margin-right: 25px;
     }
@@ -357,15 +358,20 @@ a {
     border-color: transparent;
     background-color: transparent;
 }
-    #app-header-clip .app-clip-border{
-        position:absolute;
-        bottom:-1px;
-        z-index:999;
-        display:none;
-    }
+#app-header-clip .app-clip-border {
+    position:absolute;
+    margin-left:0px;
+    bottom:0px;
+    z-index: 999;
+    /*display: none;*/
+    height: 2px;
+    width:100%;
+    
+}
     #app-header-clip .app-clip-border p {
         background-color: #007465;
         height: 2px;
+        width:50px;
     }
     #app-header-clip .nav-tabs > li {
         margin-bottom: 0px;

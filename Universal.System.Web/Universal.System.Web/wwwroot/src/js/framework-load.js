@@ -28,7 +28,7 @@ if (typeof jQuery === 'undefined' || typeof window.jQuery.fn.emulateTransitionEn
 var data = [
     { id: 1, name: "欢迎使用", link: "/src/view/welcome.html", icon: "glyphicon-send", parent_id: 0 },
     { id: 2, name: "系统设置", link: "/src/view/index.html", icon: "glyphicon-wrench", parent_id: 0 },
-    { id: 3, name: "菜单管理", link: "#", icon: "glyphicon-th-list", parent_id: 2 },
+    { id: 3, name: "菜单管理", link: "/src/view/menu.html", icon: "glyphicon-th-list", parent_id: 2 },
     { id: 4, name: "图标管理", link: "#", icon: "glyphicon-tag", parent_id: 2 },
     { id: 5, name: "权限管理", link: "#", icon: "glyphicon-lock", parent_id: 2 },
     { id: 6, name: "角色管理", link: "/src/view/account.html", icon: "glyphicon-user", parent_id: 2 },
@@ -84,7 +84,7 @@ var menuTree = function (arr, id) {
         return false;
     }
     //递归拼接菜单树
-    var menuHtml = new Array(), spacing = 20;
+    var menuHtml = new Array(), spacing = 20;//子菜单距离左边的距离
     var recursive = function (arr, id) {
         var noders = getChildNodes(arr, id);
         if (noders.length > 0) {
@@ -131,7 +131,20 @@ var getGuid = function () {
     });
 }
 
-
+/**
+ * 从数组中删除指定元素
+ * @param {arr} 数组
+ * @param {val} 值
+ */
+var removeArrayByValue = function (arr, val) {
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] == val) {
+            arr.splice(i, 1);
+            break;
+        }
+    }
+}
+//多标签页数组
 var clipArray = [];
 /**
  * 添加多标签页
@@ -156,7 +169,6 @@ var addClip = function (id, title, href, icon) {
 }
 
 var browserChange = function (headerHeight, logoHeight) {
-    var windowWidth = $(window).width();
     var windowHeight = $(window).height();
 
     $('#app-body').height(windowHeight - headerHeight);
@@ -165,19 +177,20 @@ var browserChange = function (headerHeight, logoHeight) {
 
 $(document).ready(function () {
 
-    browserChange($('#app-header').height(), $("#app-menu-logo").height());
-
     //添加菜单树
     $('#app-menu-accordion').html(menuTree(data, 0));
 
+    var browserChangeTimeout = null,
+        browserHeaderHeight = $('#app-header').height(),
+        browserMenuHeight = $("#app-menu-logo").height();
 
-    var browserChangeTimeout = null, media = 991, menuStatus = null;
+    browserChange(browserHeaderHeight, browserMenuHeight);
     // 监听游览器大小改变
     $(window).on({
         resize: function () {
             clearTimeout(browserChangeTimeout);
             browserChangeTimeout = setTimeout(function () {
-                browserChange();
+                browserChange(browserHeaderHeight, browserMenuHeight);
             }, 200);
         }
     });
@@ -221,17 +234,17 @@ $(document).ready(function () {
     //给#app-menu-accordion下所有a标签href不为空的元素绑定click事件
     $('#app-menu-accordion').on({
         click: function () {
+            var clipId = $(this).attr('id');
             var clipName = $(this).text();
             var clipHref = $(this).attr('href');//把开始的/替换掉.replace(/\//i, '')
             var clipIcon = $(this).children().attr('class');
-            var clipId = $(this).attr('id');
 
             window.location.href = '#link=' + clipHref;
             addClip(clipId, clipName, clipHref, clipIcon);
-            $('#app-body').children('iframe').attr('src', clipHref);
 
+            $('#app-body').children('iframe').attr('src', clipHref);
         }
-    }, 'a[href]')
+    }, 'a[href]');
 
     //进入/退出 全屏
     $('#app-full-screen').on({
@@ -320,9 +333,10 @@ $(document).ready(function () {
     $('#app-nav-center').on({
         click: function () {
             //淡出
-            $(this).parent().fadeToggle(200, function () {
-                this.remove()
-            })
+            $(this).parent().fadeToggle(100, function () {
+                $(this).remove();
+                removeArrayByValue(clipArray, $(this).data('muenid'));
+            });
         }
     }, '.close');
 
