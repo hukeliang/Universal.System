@@ -92,7 +92,7 @@ var menuTree = function (arr, id) {
                 var padding = noders[i].level * spacing + 10; //子节点偏移距离
                 menuHtml.push('<div class="panel panel-default app-panel">');
                 if (isChildNodes(arr, noders[i].id) > 0) {  //判断是否有子菜单
-                    menuHtml.push('<button type="button" class="btn app-btn app-transition-350" data-toggle="collapse" data-target="#u-muen' + noders[i].id + '" style="padding-left:' + padding + 'px">');
+                    menuHtml.push('<button type="button" class="btn app-btn app-transition" data-toggle="collapse" data-target="#u-muen' + noders[i].id + '" style="padding-left:' + padding + 'px">');
                     menuHtml.push('<span class="glyphicon  ' + noders[i].icon + '"></span><abbr class="">' + noders[i].name + '</abbr>');
                     menuHtml.push('<span class="glyphicon glyphicon-triangle-right app-muen-icon"></span>');
                     menuHtml.push('</button>');
@@ -101,7 +101,7 @@ var menuTree = function (arr, id) {
                     menuHtml.push('</div>');
                 }
                 else {
-                    menuHtml.push('<a id="u-muen-link' + noders[i].id + '" data-stop="default" href="' + noders[i].link + '" class="btn app-btn app-transition-350" style="padding-left:' + padding + 'px">');
+                    menuHtml.push('<a id="u-muen-link' + noders[i].id + '" data-stop="default" href="' + noders[i].link + '" class="btn app-btn app-transition" style="padding-left:' + padding + 'px">');
                     menuHtml.push('<span class="glyphicon ' + noders[i].icon + '"></span><abbr class="">' + noders[i].name + '</abbr>');
                     menuHtml.push('</a>');
                 }
@@ -131,7 +131,7 @@ var getGuid = function () {
     });
 }
 
-
+//多标签选项卡数组
 var clipArray = [];
 /**
  * 添加多标签页
@@ -155,6 +155,11 @@ var addClip = function (id, title, href, icon) {
     $clip.addClass('app-clip-selected');
 }
 
+/**
+ * 游览器宽度高度改变时改变框架容器高度和宽度
+ * @param {int} headerHeight
+ * @param {int} logoHeight
+ */
 var browserChange = function (headerHeight, logoHeight) {
     var windowWidth = $(window).width();
     var windowHeight = $(window).height();
@@ -221,10 +226,10 @@ $(document).ready(function () {
     //给#app-menu-accordion下所有a标签href不为空的元素绑定click事件
     $('#app-menu-accordion').on({
         click: function () {
+            var clipId = $(this).attr('id');
             var clipName = $(this).text();
             var clipHref = $(this).attr('href');//把开始的/替换掉.replace(/\//i, '')
             var clipIcon = $(this).children().attr('class');
-            var clipId = $(this).attr('id');
 
             window.location.href = '#link=' + clipHref;
             addClip(clipId, clipName, clipHref, clipIcon);

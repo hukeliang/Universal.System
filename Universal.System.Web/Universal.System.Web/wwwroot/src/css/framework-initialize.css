@@ -4,8 +4,8 @@
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
 }
-.app-transition-350 {
-    transition: color .35s ease-in-out,background-color .35s ease-in-out,border-color .35s ease-in-out,box-shadow .35s ease-in-out;
+.app-transition{
+    transition: color .25s ease-in-out,background-color .25s ease-in-out,border-color .25s ease-in-out,box-shadow .25s ease-in-out;
 }
 .app-not-select {
     -webkit-user-select: none;
@@ -23,16 +23,43 @@ a {
     text-decoration: none;
     color: black;
 }
-
     a:hover {
         text-decoration: none;
     }
 
+/*左侧菜单栏宽度*/
+#app-menu-accordion,
+#app-left {
+    width: 280px;
+}
+#app-body,
+#app-header {
+    margin-left: 280px;
+}
+
+/*左侧菜单栏顶部logo背景颜色*/
+#app-menu-logo {
+    background-color: #222;
+}
+/*左侧菜单栏背景颜色*/
+#app-left,
+#app-menu-accordion .app-panel,
+#app-menu-accordion .app-btn {
+    background-color: #333;
+}
+/*左侧菜单栏字体颜色*/
+#app-menu-scroll abbr,
+#app-menu-scroll a,
+#app-menu-scroll span{
+   
+}
+/*多标签页距离右边的距离*/
+#app-header-clip .app-header-clip-left {
+    margin-right: 70px;
+}
 #app-left {
     position: fixed;
-    width: 300px;
     height: 100%;
-    background-color: #333;
     z-index: 1;
     overflow: hidden
 }
@@ -44,16 +71,14 @@ a {
     background-color: #f3f3f3;
     z-index: 0;
 }
-
 #app-menu-logo {
     margin-top: 0px;
     height: 58px;
     text-align: center;
     overflow: hidden;
     margin-bottom: 0;
-    background-color: #222;
+   
 }
-
     #app-menu-logo span {
         font-size: 24px;
         line-height: 58px;
@@ -70,34 +95,28 @@ a {
     overflow: auto;
     z-index: 1;
 }
-
-#app-menu-accordion {
-    width: 300px;
-}
-
     #app-menu-accordion .glyphicon {
         width: 20px !important;
     }
 
 
 
-.app-panel {
+#app-menu-accordion .app-panel {
     border: none;
     background-color: #333;
     border-radius: 0px;
     margin-bottom: 0px !important;
 }
+#app-menu-accordion .app-panel panel {
+    background-color: #333;
+    color: rgba(255, 255, 255, 0.7);
+}
 
-    .app-panel panel {
-        background-color: #333;
-        color: rgba(255, 255, 255, 0.7);
-    }
-
-    .app-panel > div a {
-        height: 32px;
-    }
-
-.app-muen-icon {
+#app-menu-accordion .app-panel > div a {
+    height: 32px;
+}
+#app-left .app-muen-icon,
+#app-right .app-muen-icon {
     position: absolute;
     right: 5px;
     height: 100%;
@@ -107,21 +126,22 @@ a {
     font-size: 12px;
 }
 
-.app-btn {
+#app-menu-accordion .app-btn {
     position: relative;
     display: flex;
     align-items: center;
     height: 40px;
     width: 100%;
     text-align: left;
-    background-color: #333;
     border-color: #333;
     border-radius: 0px;
     border: none;
     color: rgba(255, 255, 255, 0.7);
 }
 
-.btn.focus, .btn:focus, .btn:hover {
+#app-menu-accordion .btn.focus,
+#app-menu-accordion .btn:focus,
+#app-menu-accordion .btn:hover {
     color: #fff !important;
     background-color: #5c5c5c;
     border-color: #5c5c5c;
@@ -134,15 +154,7 @@ a {
     padding-bottom: 2px;
 }
 
-.app-body {
-    min-height: 30px;
-}
-
-.app-body, #app-header {
-    margin-left: 300px;
-}
-
-.app-header-info {
+#app-header .app-header-info {
     min-height: 58px;
 }
 
@@ -164,11 +176,6 @@ a {
 #app-body {
     min-height: 30px;
 }
-
-#app-body, .app-header {
-    margin-left: 300px;
-}
-
     #app-body iframe {
         width: 100%;
         height: 100%;
@@ -229,6 +236,7 @@ a {
 .app-user-menu {
     padding: 2px 0;
     top: 60px;
+    border-radius:3px;
     min-width: 185px;
     overflow-y: auto;
 }
@@ -304,10 +312,6 @@ a {
     border-right: none;
     box-shadow: 0 2px 3px 0 rgba(0,0,0,.1);
 }
-#app-header-clip .app-header-clip-left {
-    margin-right: 70px;
-}
-
 #app-header-clip .app-header-clip-right {
     position: absolute;
     top: 0;
@@ -322,11 +326,7 @@ a {
         border: none;
         background-color: transparent;
         color: #888888;
-        /*display:none;*/
-    }
-    #app-header-clip #app-nav-center {
-        margin-left: 25px;
-        margin-right: 25px;
+        display:none;
     }
 #app-nav-center a {
     color: #666666;
