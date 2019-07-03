@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,6 +32,7 @@
     </script>-->
 </head>
 <body>
+    <!--<div id="u-calculate-tabstrip">用来临时计算当前打开的选项卡的宽度的容器</div>-->
     <!-- 模态框（Modal） -->
     <div class="modal fade" id="app-logout" aria-hidden="true">
         <div class="modal-dialog">
@@ -138,27 +139,21 @@
                     <button class="pull-right app-nav-right app-transition">
                         <span class="glyphicon glyphicon-menu-right"></span>
                     </button>
-                    <div id="app-nav-center">
-                        <ul class="nav nav-tabs">
-                            <li class="app-clip-selected">
-                                <a href="#" data-stop="default">
+                    <div id="app-nav-center" class="app-transition">
+                        <!--强制给一个默认宽度-->
+                        <ul class="nav nav-tabs" style="width:1000px;">
+                            <li id="u-iframe-source1" data-tabstrip-select="true">
+                                <a href="https://www.baidu.com" data-stop="default">
                                     <span class="glyphicon glyphicon-home"></span>
                                     首页
                                 </a>
-                            </li>
-                            <li>
-                                <a href="#" data-stop="default">
-                                    <span class="glyphicon glyphicon-backward"></span>
-                                    欢迎
-                                </a>
-                                <span class="close">&times;</span>
+                                <!--<span class="close">&times;</span>-->
                             </li>
                         </ul>
                         <div class="app-clip-border">
                             <p></p>
                         </div>
                     </div>
-
                 </div>
                 <div class="app-header-clip-right">
                     <a data-toggle="tooltip" class="app-transition" data-placement="bottom" title="刷新本页">
@@ -171,7 +166,7 @@
             </div>
         </div>
         <div id="app-body">
-            <iframe src="/src/view/index.html" frameborder="0"></iframe>
+            <iframe frameborder="0" data-iframe-source="#u-iframe-source1"></iframe>
         </div>
     </div>
 </body>
